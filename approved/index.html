@@ -469,6 +469,25 @@ a:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
 /* ANIMATIONS */
 @keyframes fade-up{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
 .animate-in{animation:fade-up .6s ease forwards}
+
+/* === Above-the-fold calendar: compact hero + section header (2026-07-13) === */
+.approved-hero{padding:26px 0 14px !important}
+.approved-hero__sub{margin:0 auto 6px !important}
+.approved-hero__trust{margin-top:10px !important}
+.calendly-section{padding:12px 0 44px !important}
+.calendly-section h2{margin-bottom:4px !important}
+.calendly-section__hint{margin-bottom:12px !important}
+@media(max-width:560px){
+  .approved-hero{padding:14px 0 10px !important}
+  .approved-hero h1{font-size:24px !important;line-height:1.18 !important}
+  .approved-hero__sub{font-size:14.5px !important;line-height:1.5 !important}
+  .approved-hero__trust{font-size:12.5px !important;gap:8px !important}
+  .calendly-section{padding:8px 0 36px !important}
+  .calendly-section h2{font-size:20px !important}
+  .calendly-section__hint{font-size:13px !important;margin-bottom:8px !important}
+  .calendly-section__hint{display:none}
+  #calendly-top,#calendly-bottom{min-height:600px}
+}
 </style>
 </head>
 
