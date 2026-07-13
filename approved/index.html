@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>You're Approved: TinyPumper Q&amp;A Call</title>
+<link rel="canonical" href="https://quiz.tinypumper.com/approved">
+<link rel="shortcut icon" href="https://tinypumper.com/assets/favicon.ico" type="image/x-icon">
+
+<!-- Google Tag Manager (carries GA4, Meta pixel, UET, LinkedIn, Google Ads + linker) -->
+<script>
+(function(w,d,s,l,i){
+  w[l]=w[l]||[];
+  w[l].push({'gtm.start': new Date().getTime(), event:'gtm.js'});
+  var f=d.getElementsByTagName(s)[0],
+      j=d.createElement(s),
+      dl=l!='dataLayer'?'&l='+l:'';
+  j.async=true;
+  j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;
+  f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-5PQGM83');
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<!-- Calendly CSS — loaded early so widget renders with correct styles -->
+<link href="https://assets.calendly.com/assets/external/widget.css" rel="stylesheet">
+
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#FAF8F5;--bg-warm:#F3EFE9;--bg-card:#FFF;
+  --bg-dark:#1C1B18;--bg-dark-mid:#26241F;
+  --gold:#C8993B;--gold-hover:#B58A2F;
+  --gold-light:rgba(200,153,59,0.12);--gold-highlight:rgba(200,153,59,0.15);
+  --green:#4D7C5A;--red:#994848;
+  --ink:#1C1B18;--ink-light:#FAF8F5;--ink-muted:#78736B;--ink-dim:#A8A29E;
+  --border:#E2DDD5;--border-dk:#3A3730;
+  --radius:8px;--radius-lg:16px;
+  --f-display:'Libre Baskerville',Georgia,serif;
+  --f-body:'Outfit',-apple-system,BlinkMacSystemFont,sans-serif;
+}
+html{scroll-behavior:smooth;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+body{font-family:var(--f-body);font-size:17px;background:var(--bg);color:var(--ink);line-height:1.7;overflow-x:hidden}
+a{color:var(--gold);text-decoration:none}
+a:hover{text-decoration:underline}
+a:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+
+@media(prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  .top-bar__dot{animation:none !important}
+}
+
+/* TOP BAR */
+.top-bar{
+  background:rgba(28,27,24,0.96);
+  backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
+  border-bottom:1px solid var(--border-dk);
+  padding:10px 16px;text-align:center;
+  position:sticky;top:0;z-index:1000;
+}
+.top-bar__inner{
+  max-width:800px;margin:0 auto;
+  display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap;
+}
+.top-bar__dot{
+  width:8px;height:8px;border-radius:50%;background:var(--gold);
+  animation:pulse-dot 1.5s ease-in-out infinite;flex-shrink:0;
+}
+@keyframes pulse-dot{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.7)}}
+.top-bar__text{font-size:13px;font-weight:500;color:var(--ink-light);letter-spacing:.02em}
+.top-bar__highlight{color:var(--gold);font-weight:600}
+
+/* CONTAINER */
+.container{max-width:800px;margin:0 auto;padding:0 24px}
+.container--wide{max-width:960px}
+
+/* APPROVED HERO */
+.approved-hero{
+  padding:56px 0 40px;text-align:center;
+  background:linear-gradient(180deg,rgba(200,153,59,.05) 0%,transparent 100%);
+}
+.approved-badge{
+  display:inline-flex;align-items:center;gap:8px;
+  background:rgba(77,124,90,.08);
+  border:1px solid rgba(77,124,90,.25);border-radius:999px;
+  padding:8px 20px;margin-bottom:20px;
+}
+.approved-badge__check{
+  width:20px;height:20px;border-radius:50%;background:var(--green);
+  display:flex;align-items:center;justify-content:center;
+  font-size:12px;color:#fff;font-weight:700;
+}
+.approved-badge__text{font-size:14px;font-weight:600;color:var(--green);letter-spacing:.06em;text-transform:uppercase}
+.approved-hero h1{
+  font-family:var(--f-display);
+  font-size:clamp(28px,5vw,42px);font-weight:700;line-height:1.2;
+  letter-spacing:-0.015em;margin-bottom:16px;color:var(--ink);
+}
+.approved-hero h1 em{color:var(--gold);font-style:normal}
+.approved-hero__sub{
+  font-size:clamp(16px,2.5vw,18px);color:var(--ink-muted);
+  max-width:580px;margin:0 auto 8px;line-height:1.6;
+}
+.approved-hero__trust{
+  margin-top:18px;font-size:14px;color:var(--ink-muted);
+  display:flex;align-items:center;justify-content:center;gap:18px;flex-wrap:wrap;
+}
+.approved-hero__award{margin-top:20px;display:flex;align-items:center;justify-content:center;gap:14px;flex-wrap:wrap}
+.approved-hero__award img{height:72px;width:auto}
+.approved-hero__award span{font-style:italic;font-size:15.5px;color:var(--ink-muted)}
+
+/* CALENDLY SECTION */
+.calendly-section{padding:24px 0 56px;scroll-margin-top:56px}
+.calendly-section h2{
+  font-family:var(--f-display);
+  text-align:center;font-size:clamp(22px,3.2vw,28px);font-weight:700;
+  margin-bottom:6px;color:var(--ink);letter-spacing:-0.015em;
+}
+.calendly-section__hint{
+  text-align:center;font-size:15px;color:var(--ink-muted);margin-bottom:20px;
+  max-width:560px;margin-left:auto;margin-right:auto;
+}
+.calendly-wrapper{overflow:visible;position:relative}
+#calendly-top,#calendly-bottom{overflow:visible !important;min-height:680px}
+
+/* WHY-NOW STRIP */
+.whynow-strip{
+  background:var(--bg-warm);
+  border-top:1px solid var(--border);border-bottom:1px solid var(--border);
+  padding:36px 24px;text-align:center;
+}
+.whynow-strip__inner{max-width:620px;margin:0 auto}
+.whynow-strip__headline{
+  font-family:var(--f-display);
+  font-size:19px;font-weight:700;color:var(--ink);margin-bottom:10px;
+}
+.whynow-strip__desc{font-size:15px;color:var(--ink-muted);line-height:1.7;margin-bottom:10px}
+.whynow-strip__desc strong{color:var(--ink)}
+.whynow-strip__note{font-size:13px;color:var(--ink-dim)}
+
+/* CALL STEPS */
+.call-steps{padding:64px 0}
+.call-steps h2{
+  font-family:var(--f-display);text-align:center;
+  font-size:clamp(22px,3.5vw,30px);font-weight:700;margin-bottom:32px;letter-spacing:-0.015em;
+}
+.call-steps__grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+@media(max-width:960px){.call-steps__grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:560px){.call-steps__grid{grid-template-columns:1fr}}
+.call-step{
+  background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);
+  box-shadow:0 2px 12px rgba(28,27,24,0.04);padding:24px;
+}
+.call-step__num{
+  width:32px;height:32px;border-radius:50%;background:var(--gold);color:var(--bg-dark);
+  display:flex;align-items:center;justify-content:center;font-weight:700;margin-bottom:12px;
+}
+.call-step__title{font-weight:700;font-size:16px;margin-bottom:6px}
+.call-step__desc{font-size:14.5px;color:var(--ink-muted);line-height:1.6}
+
+/* PRICING */
+.pricing-section{padding:64px 0;background:var(--bg-warm);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+.pricing-section h2{
+  font-family:var(--f-display);
+  text-align:center;font-size:clamp(24px,4vw,34px);font-weight:700;
+  margin-bottom:8px;letter-spacing:-0.015em;
+}
+.pricing-section__sub{
+  text-align:center;font-size:16px;color:var(--ink-muted);
+  max-width:640px;margin:0 auto 36px;
+}
+.setup-card{
+  background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);
+  box-shadow:0 2px 12px rgba(28,27,24,0.04);
+  padding:32px;max-width:720px;margin:0 auto 36px;text-align:center;
+}
+.setup-card__price{font-family:var(--f-display);font-size:clamp(32px,5vw,44px);font-weight:700;color:var(--gold);line-height:1.1}
+.setup-card__label{font-size:15px;font-weight:600;margin:6px 0 14px}
+.setup-card__includes{font-size:14.5px;color:var(--ink-muted);line-height:1.7;max-width:560px;margin:0 auto}
+.tier-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;max-width:820px;margin:0 auto}
+@media(max-width:768px){.tier-grid{grid-template-columns:1fr}}
+.tier-card{
+  background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);
+  padding:28px 20px;text-align:center;
+  box-shadow:0 2px 12px rgba(28,27,24,0.04);
+}
+.tier-card--featured{background:var(--gold-light);border:2px solid var(--gold);position:relative}
+.tier-card__popular{
+  position:absolute;top:-12px;left:50%;transform:translateX(-50%);
+  background:var(--gold);color:var(--bg-dark);font-size:11px;font-weight:700;
+  padding:3px 12px;border-radius:999px;white-space:nowrap;
+}
+.tier-card__label{font-size:13px;font-weight:600;color:var(--ink-muted);text-transform:uppercase;letter-spacing:.04em;margin-bottom:12px}
+.tier-card--featured .tier-card__label{color:var(--gold)}
+.tier-card__price{font-family:var(--f-display);font-size:clamp(32px,5vw,44px);font-weight:700;color:var(--ink);line-height:1}
+.tier-card--featured .tier-card__price{color:var(--gold)}
+.tier-card__period{font-size:13px;color:var(--ink-dim);margin:4px 0 16px}
+.tier-card__desc{font-size:14px;color:var(--ink-muted);line-height:1.5}
+.tier-card__desc strong{color:var(--ink)}
+.tier-card--featured .tier-card__desc strong{color:var(--gold)}
+.pricing-tiers__note{text-align:center;font-size:13px;color:var(--ink-dim);margin-top:16px}
+
+/* GUARANTEE */
+.guarantee{
+  max-width:680px;margin:40px auto 0;text-align:center;
+  background:rgba(77,124,90,.06);border:2px solid rgba(77,124,90,.25);
+  border-radius:var(--radius-lg);padding:36px 28px;
+}
+.guarantee__icon{font-size:38px;display:block;margin-bottom:8px}
+.guarantee h3{font-family:var(--f-display);font-size:22px;font-weight:700;color:var(--green);margin-bottom:10px}
+.guarantee__text{font-size:16px;line-height:1.7;color:var(--ink)}
+.guarantee__text strong{color:var(--green)}
+.guarantee__note{font-size:13px;color:var(--ink-dim);margin-top:10px}
+
+/* TESTIMONIAL STRIP */
+.testimonial-strip{padding:56px 0;background:var(--bg-dark);color:var(--ink-light)}
+.testimonial-strip blockquote{
+  max-width:680px;margin:0 auto;text-align:center;
+  font-size:16px;line-height:1.8;font-style:italic;color:var(--ink-light);
+}
+.testimonial-strip blockquote::before{content:'\201C';color:var(--gold);font-family:Georgia,serif;font-size:40px;line-height:0;vertical-align:-14px;margin-right:6px}
+.testimonial-strip cite{
+  display:block;margin-top:16px;font-size:14px;font-weight:600;font-style:normal;color:var(--ink-dim);
+}
+.testimonial-strip__stars{text-align:center;color:var(--gold);letter-spacing:3px;margin-bottom:14px}
+
+/* FINAL CTA */
+.final-cta{padding:56px 0 72px}
+.final-cta h2{
+  font-family:var(--f-display);text-align:center;
+  font-size:clamp(22px,3.5vw,30px);font-weight:700;margin-bottom:8px;letter-spacing:-0.015em;
+}
+.final-cta__sub{
+  text-align:center;font-size:16px;color:var(--ink-muted);
+  max-width:600px;margin:0 auto 28px;
+}
+
+/* CTA BUTTON */
+.cta-btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  background:var(--gold);color:var(--bg-dark);
+  font-family:var(--f-body);font-weight:600;font-size:16px;
+  padding:15px 32px;border-radius:var(--radius);border:none;cursor:pointer;
+  letter-spacing:.02em;text-transform:uppercase;
+  transition:background .2s,transform .15s;
+}
+.cta-btn:hover{background:var(--gold-hover);transform:translateY(-1px);text-decoration:none;color:var(--bg-dark)}
+.cta-btn--center{display:flex;max-width:340px;margin:32px auto 0}
+
+/* FLOATING MOBILE CTA */
+.floating-cta{
+  position:fixed;bottom:16px;left:16px;right:16px;z-index:900;text-align:center;
+  transition:opacity .3s ease;
+}
+.floating-cta .cta-btn{width:100%;max-width:420px;box-shadow:0 8px 24px rgba(28,27,24,.22)}
+@media(min-width:721px){.floating-cta{display:none}}
+
+/* FOOTER */
+.page-footer{padding:40px 24px 100px;text-align:center;border-top:1px solid var(--border)}
+@media(min-width:721px){.page-footer{padding-bottom:40px}}
+.page-footer__logo{font-size:14px;font-weight:600;color:var(--ink-muted);margin-bottom:4px}
+.page-footer__copy{font-size:11px;color:var(--ink-dim)}
+</style>
+</head>
+
+<body>
+<!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-5PQGM83" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+
+<!-- TOP BAR -->
+<div class="top-bar">
+  <div class="top-bar__inner">
+    <span class="top-bar__dot" aria-hidden="true"></span>
+    <span class="top-bar__text">Application reviewed: <span class="top-bar__highlight">your operation qualifies</span>. Book your call below.</span>
+  </div>
+</div>
+
+<!-- HERO -->
+<section class="approved-hero">
+  <div class="container">
+    <div class="approved-badge">
+      <span class="approved-badge__check" aria-hidden="true">&#10003;</span>
+      <span class="approved-badge__text">Application Approved</span>
+    </div>
+    <h1>You Qualified for <em>TinyPumper</em></h1>
+    <p class="approved-hero__sub">Based on your quiz answers, your operation is a strong fit. Next step: a short call with a TinyPumper production engineer. Straight answers about your leases, your tanks, and what monitoring looks like without the cost and complexity of SCADA. No pitch, no pressure.</p>
+    <div class="approved-hero__trust">
+      <span>Backed by GreaseBook</span>
+      <span>&bull;</span>
+      <span>The #1 oil &amp; gas production software as rated by independent producers</span>
+    </div>
+    <div class="approved-hero__award">
+      <img src="/assets/oil-gas-awards.png" alt="Oil &amp; Gas Awards" loading="lazy">
+      <span>&ldquo;New Technology Development of the Year!&rdquo;</span>
+    </div>
+  </div>
+</section>
+
+<!-- CALENDLY #1 -->
+<section class="calendly-section" id="book-call">
+  <div class="container">
+    <h2>Got Questions? Pick a Time to Talk.</h2>
+    <p class="calendly-section__hint">15 minutes with a production engineer who knows tank batteries, not a script reader. Straight answers about your specific operation.</p>
+    <div class="calendly-wrapper">
+      <div id="calendly-top" data-auto-load="false" style="min-width:320px;height:700px;"></div>
+    </div>
+  </div>
+</section>
+
+<!-- WHY NOW STRIP -->
+<div class="whynow-strip">
+  <div class="whynow-strip__inner">
+    <div class="whynow-strip__headline">Why Operators Book Now Instead of Later</div>
+    <p class="whynow-strip__desc">We buy sensors in batches, and a production engineer walks every operator through setup personally. That means <strong>hardware batches and the engineer's calendar, not software, are the bottleneck.</strong> Want sensors on a lease this month? Book the call. Not pulling the trigger for another 30 or 60 days? Book it anyway: when you're ready to move, you'll already have your answers and you won't be waiting on the next batch to ship.</p>
+    <p class="whynow-strip__note">You're just booking a call. Nothing to pay, nothing to sign.</p>
+  </div>
+</div>
+
+<!-- WHAT HAPPENS ON THE CALL -->
+<section class="call-steps">
+  <div class="container container--wide">
+    <h2>What Actually Happens on the Call</h2>
+    <div class="call-steps__grid">
+      <div class="call-step">
+        <div class="call-step__num">1</div>
+        <div class="call-step__title">He asks a few questions</div>
+        <div class="call-step__desc">Lease count, tank setup, what keeps you guessing today: levels, pressure, downtime, theft. He knows oil and gas operations. Not a script reader.</div>
+      </div>
+      <div class="call-step">
+        <div class="call-step__num">2</div>
+        <div class="call-step__title">You see it working</div>
+        <div class="call-step__desc">Live sensor data flowing into the GreaseBook app: tank levels, pressures, run-times, alerts. The same view you'd have on your own leases.</div>
+      </div>
+      <div class="call-step">
+        <div class="call-step__num">3</div>
+        <div class="call-step__title">You get straight answers</div>
+        <div class="call-step__desc">Which sensors fit your operation, what to monitor first, and exactly what your lease count costs. The pricing below is the pricing. No surprises on the call.</div>
+      </div>
+      <div class="call-step">
+        <div class="call-step__num">4</div>
+        <div class="call-step__title">You decide</div>
+        <div class="call-step__desc">If it's a fit, your pumper installs the first sensor in about 10 minutes and you've got 60 days to love it or shove it. If it's not, say so straight. He can take it.</div>
+      </div>
+    </div>
+    <div>
+      <a href="#book-call" class="cta-btn cta-btn--center">Pick My Time &rarr;</a>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section class="pricing-section">
+  <div class="container container--wide">
+    <h2>The Pricing, Right Here on the Page</h2>
+    <p class="pricing-section__sub">No quote games. Remote monitoring the old way runs tens of thousands per well plus maintenance contracts. TinyPumper is a one-time setup fee per device and a flat monthly rate per site, with unlimited sensors on every plan.</p>
+
+    <div class="setup-card">
+      <div class="setup-card__price">$349</div>
+      <div class="setup-card__label">One-time setup &amp; activation, per device</div>
+      <p class="setup-card__includes">Includes the sensor itself (radar tank level, pressure, vibration, or run-time), a sensor-selection consultation, cellular or satellite activation, shipping to your door or your pumper's, a live setup walkthrough with a production engineer, and a lifetime warranty. Device fails in 10 years? Replaced free.</p>
+    </div>
+
+    <div class="tier-grid">
+      <div class="tier-card">
+        <div class="tier-card__label">Standard</div>
+        <div class="tier-card__price">$79</div>
+        <div class="tier-card__period">/month per site</div>
+        <div class="tier-card__desc">Updates every <strong>8 hours</strong><br>3x daily readings</div>
+      </div>
+      <div class="tier-card tier-card--featured">
+        <div class="tier-card__popular">MOST POPULAR</div>
+        <div class="tier-card__label">Enhanced</div>
+        <div class="tier-card__price">$99</div>
+        <div class="tier-card__period">/month per site</div>
+        <div class="tier-card__desc">Updates every <strong>4 hours</strong><br>6x daily readings</div>
+      </div>
+      <div class="tier-card">
+        <div class="tier-card__label">Premium</div>
+        <div class="tier-card__price">$129</div>
+        <div class="tier-card__period">/month per site</div>
+        <div class="tier-card__desc">Updates every <strong>hour</strong><br>24x daily readings</div>
+      </div>
+    </div>
+    <p class="pricing-tiers__note">Every plan includes: unlimited sensors per site &bull; the GreaseBook app &bull; real-time alerts &bull; lifetime warranty &bull; cellular or satellite &bull; no contracts, cancel anytime</p>
+
+    <!-- GUARANTEE -->
+    <div class="guarantee">
+      <span class="guarantee__icon" aria-hidden="true">&#x1F6E1;&#xFE0F;</span>
+      <h3>60-Day &ldquo;Love It or Shove It&rdquo; Guarantee</h3>
+      <p class="guarantee__text">Just like buying a house: you don't commit without walking through it first. Drop TinyPumper on a lease. Run it for 60 days. If it ain't a fit, <strong>ship it back. No harm, no foul.</strong></p>
+      <p class="guarantee__note">We even cover return shipping.</p>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIAL -->
+<section class="testimonial-strip">
+  <div class="container">
+    <div class="testimonial-strip__stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+    <blockquote>
+      On behalf of all of us at Millennium Resources, a small family-owned oil company, we want to thank you for your intellectual efforts to modernize a small corner of the oil industry for stripper-well operators. This is something we have longed to do, but until now, we could not find a platform that was viable to our bottom line. Thank you for your endeavors to help the little guys.
+      <cite>Michele L. James, Owner | Millennium Resources | Midland, TX</cite>
+    </blockquote>
+  </div>
+</section>
+
+<!-- FINAL CTA + CALENDLY #2 -->
+<section class="final-cta" id="book-call-bottom">
+  <div class="container">
+    <h2>You Did the Hard Part. Now Just Pick a Time.</h2>
+    <p class="final-cta__sub">You took the quiz and qualified. The last step between you and eyes on every lease is one short call.</p>
+    <div class="calendly-wrapper">
+      <div id="calendly-bottom" data-auto-load="false" style="min-width:320px;height:700px;"></div>
+    </div>
+  </div>
+</section>
+
+<!-- FLOATING MOBILE CTA -->
+<div class="floating-cta" id="floating-cta">
+  <a href="#book-call" class="cta-btn">Schedule My Free Call &rarr;</a>
+</div>
+
+<!-- FOOTER -->
+<footer class="page-footer">
+  <div class="page-footer__logo">TinyPumper by Greasebook</div>
+  <div class="page-footer__copy">&copy; 2026 Greasebook Inc. All rights reserved.</div>
+</footer>
+
+<!-- SCRIPTS -->
+<script>
+(function(){
+  var params = new URLSearchParams(window.location.search);
+  var name    = params.get('name') || '';
+  var email   = params.get('email') || '';
+  var company = params.get('a1') || '';
+  var phone   = params.get('a2') || '';
+  var info    = params.get('a3') || '';
+  var source  = params.get('source') || params.get('utm_source') || 'Not Set';
+  var medium   = params.get('utm_medium')   || '';
+  var campaign = params.get('utm_campaign') || '';
+  var term     = params.get('utm_term')     || '';
+  var content  = params.get('utm_content')  || '';
+  var gclid    = params.get('gclid')        || '';
+  var fbclid   = params.get('fbclid')       || '';
+
+  // Real GA4 client_id from _ga cookie (format: GA1.1.<cid>.<ts>)
+  function getGaClientId(){
+    var m = (document.cookie || '').match(/(?:^|;\s*)_ga=GA\d+\.\d+\.([^;]+)/);
+    return m ? m[1] : '';
+  }
+  var gaClientId = getGaClientId();
+
+  // Compact attribution token stuffed into utm_content so the Calendly
+  // webhook can recover it after the booking POST.
+  function buildAttrToken(){
+    var parts = [];
+    if (content)    parts.push(content);
+    if (gaClientId) parts.push('gacid_' + gaClientId);
+    if (gclid)      parts.push('gclid_' + gclid);
+    if (fbclid)     parts.push('fbclid_' + fbclid);
+    return parts.join('|');
+  }
+  var attrToken = buildAttrToken();
+
+  var baseUrl = 'https://calendly.com/d/cxdj-jw4-tr7/tinypumper-intro'
+    + '?hide_event_type_details=1'
+    + '&hide_gdpr_banner=1'
+    + '&primary_color=C8993B'
+    + '&embed_domain=' + encodeURIComponent(window.location.hostname)
+    + '&embed_type=Inline'
+    + '&utm_source=' + encodeURIComponent(source)
+    + (medium   ? '&utm_medium='   + encodeURIComponent(medium)   : '')
+    + (campaign ? '&utm_campaign=' + encodeURIComponent(campaign) : '')
+    + (term     ? '&utm_term='     + encodeURIComponent(term)     : '')
+    + (attrToken ? '&utm_content=' + encodeURIComponent(attrToken) : '');
+
+  // First-touch attribution to Apps Script (idempotent, first-touch wins).
+  if (email) {
+    try {
+      var attrPayload = {
+        type: 'attribution',
+        data: {
+          email: email,
+          ga_client_id: gaClientId,
+          gclid: gclid,
+          fbclid: fbclid,
+          utm_source:   source,
+          utm_medium:   medium,
+          utm_campaign: campaign,
+          utm_term:     term,
+          utm_content:  content,
+          referrer:     document.referrer || '',
+          landing_page: window.location.href
+        }
+      };
+      var attrUrl = 'https://script.google.com/macros/s/AKfycbyKf_TeD4lSxWl0ablWQXgVQbsQZUsiXtp8M0vbJeBZM20Ax8lBY2fCQur_w3L7JxuIzg/exec';
+      fetch(attrUrl, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify(attrPayload)
+      }).catch(function(){ /* fire-and-forget */ });
+    } catch(_) { /* never break the booking flow */ }
+  }
+
+  var prefill = {
+    name: name,
+    email: email,
+    customAnswers: { a1: company, a2: phone, a3: info }
+  };
+
+  var initialized = false;
+
+  function initWidgets(){
+    if(initialized) return;
+    if(typeof Calendly === 'undefined'){
+      setTimeout(initWidgets, 100);
+      return;
+    }
+    initialized = true;
+    Calendly.initInlineWidget({
+      url: baseUrl,
+      parentElement: document.getElementById('calendly-top'),
+      prefill: prefill
+    });
+    Calendly.initInlineWidget({
+      url: baseUrl,
+      parentElement: document.getElementById('calendly-bottom'),
+      prefill: prefill
+    });
+  }
+
+  function loadCalendlyScript(isRetry){
+    var s = document.createElement('script');
+    s.src = 'https://assets.calendly.com/assets/external/widget.js';
+    s.async = true;
+    s.onload = initWidgets;
+    if(!isRetry){
+      s.onerror = function(){
+        setTimeout(function(){ loadCalendlyScript(true); }, 2000);
+      };
+    }
+    document.head.appendChild(s);
+  }
+
+  loadCalendlyScript(false);
+
+  // Booking event → GTM dataLayer (+ gtag/fbq guards if GTM defines them)
+  window.addEventListener('message', function(e){
+    if(e.data.event && e.data.event.indexOf('calendly') === 0){
+      if(e.data.event === 'calendly.event_scheduled'){
+        if(window.dataLayer){
+          window.dataLayer.push({event:'calendly_scheduled', funnel:'tp-approved', lead_source:source});
+        }
+        if(typeof gtag === 'function'){
+          gtag('event','Scheduled Meeting',{'event_category':'End of Funnel','event_label':source});
+        }
+        if(typeof fbq === 'function'){
+          fbq('track','Schedule');
+        }
+      }
+    }
+  });
+})();
+</script>
+
+<!-- Hide floating CTA when a calendar is visible -->
+<script>
+(function(){
+  var floatingCta = document.getElementById('floating-cta');
+  if(!floatingCta) return;
+  var topCal = document.getElementById('calendly-top');
+  var bottomCal = document.getElementById('calendly-bottom');
+
+  function checkVisibility(){
+    if(!topCal || !bottomCal) return;
+    var topRect = topCal.getBoundingClientRect();
+    var bottomRect = bottomCal.getBoundingClientRect();
+    var vh = window.innerHeight;
+    var topVisible = topRect.top < vh && topRect.bottom > 0;
+    var bottomVisible = bottomRect.top < vh && bottomRect.bottom > 0;
+    floatingCta.style.opacity = (topVisible || bottomVisible) ? '0' : '1';
+    floatingCta.style.pointerEvents = (topVisible || bottomVisible) ? 'none' : 'auto';
+  }
+  window.addEventListener('scroll', checkVisibility, {passive:true});
+  checkVisibility();
+})();
+</script>
+
+</body>
+</html>

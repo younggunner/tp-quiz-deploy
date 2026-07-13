@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>TinyPumper Invitation Form</title>
+<link rel="canonical" href="https://quiz.tinypumper.com/quiz">
+
+<!-- Google Tag Manager -->
+<script>
+(function(w,d,s,l,i){
+  w[l]=w[l]||[];
+  w[l].push({'gtm.start': new Date().getTime(), event:'gtm.js'});
+  var f=d.getElementsByTagName(s)[0],
+      j=d.createElement(s),
+      dl=l!='dataLayer'?'&l='+l:'';
+  j.async=true;
+  j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;
+  f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-5PQGM83');
+</script>
+
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%;background:#1C1B18}
+body{display:flex;flex-direction:column;font-family:'Outfit',-apple-system,BlinkMacSystemFont,sans-serif}
+.logo-bar{background:#1C1B18;padding:14px 20px;text-align:center;flex-shrink:0}
+.logo-bar img{height:38px;width:auto;vertical-align:middle}
+.tf-wrap{flex:1 1 auto;min-height:0}
+#tf-tp-widget{width:100% !important;height:100% !important}
+</style>
+</head>
+<body>
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-5PQGM83" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+
+<div class="logo-bar">
+  <img src="/assets/tp-logo-quiz.svg" alt="TinyPumper">
+</div>
+
+<div class="tf-wrap">
+  <div id="tf-tp-widget"
+       data-tf-widget="uVP2g9QP"
+       data-tf-opacity="100"
+       data-tf-iframe-props="title=TinyPumper Quiz"
+       data-tf-transitive-search-params
+       data-tf-medium="snippet"
+       style="width:100%;height:100%;"></div>
+</div>
+
+<!-- Attribution script — ported VERBATIM from the live Instapage page (captured 2026-07-13).
+     ONE copy only. Sets data-tf-hidden BEFORE embed.js renders the iframe. -->
+<script>
+(function () {
+  function uuidv4() {
+    if (window.crypto && crypto.randomUUID) return crypto.randomUUID();
+    return ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g, function(c){
+      return (c ^ (crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c/4)).toString(16);
+    });
+  }
+  function readCookie(name) {
+    var m = document.cookie.match('(^|;)\\s*' + name + '=([^;]+)');
+    return m ? decodeURIComponent(m[2]) : '';
+  }
+  function readGaClientId() {
+    var c = readCookie('_ga');
+    if (!c) return '';
+    var p = c.split('.');
+    return (p.length >= 4) ? (p[2] + '.' + p[3]) : '';
+  }
+
+  var gb_uid;
+  try {
+    gb_uid = localStorage.getItem('gb_uid');
+    if (!gb_uid) { gb_uid = uuidv4(); localStorage.setItem('gb_uid', gb_uid); }
+  } catch (e) { gb_uid = uuidv4(); }
+
+  var hidden = { gb_uid: gb_uid };
+  var fbp = readCookie('_fbp');
+  if (fbp) hidden.fbp = fbp;
+  var gaId = readGaClientId();
+  if (gaId) hidden.ga_client_id = gaId;
+
+  // Also pull UTMs from the page URL into hidden fields. data-tf-transitive-search-params
+  // already does this, but populating data-tf-hidden makes it explicit + survives
+  // any Typeform behavior change.
+  var params = new URLSearchParams(window.location.search);
+  ['utm_source','utm_medium','utm_campaign','utm_content','utm_term','fbclid','gclid','source'].forEach(function(k) {
+    var v = params.get(k);
+    if (v) hidden[k] = v;
+  });
+  // Fallback: first-touch UTMs persisted from an earlier site visit (e.g. Capterra → homepage → quiz)
+  if (!hidden.utm_source && !hidden.utm_medium && !hidden.utm_campaign) {
+    try {
+      var ft = JSON.parse(localStorage.getItem('gb_first_touch') || 'null');
+      if (ft) ['utm_source','utm_medium','utm_campaign','utm_content','utm_term','gclid','fbclid','landing_page','referrer'].forEach(function(k) {
+        if (ft[k] && !hidden[k]) hidden[k] = ft[k];
+      });
+    } catch(e) {}
+  }
+
+  // Cross-domain attribution from tinypumper.com tp-attr.js (cookie set on .tinypumper.com).
+  // Replaces what Cometly used to capture for organic visitors.
+  try {
+    var tpAttrRaw = readCookie('tp_attr');
+    if (tpAttrRaw) {
+      var tpAttr = JSON.parse(tpAttrRaw);
+      if (tpAttr.origin_referrer && !hidden.origin_referrer) hidden.origin_referrer = tpAttr.origin_referrer;
+      // Pull UTMs from cookie when URL didn't have any (organic → /quiz directly)
+      ['utm_source','utm_medium','utm_campaign','utm_content','utm_term','gclid','fbclid'].forEach(function(k){
+        if (tpAttr[k] && !hidden[k]) hidden[k] = tpAttr[k];
+      });
+      // Build page_journey: tinypumper.com hops (from cookie) + current quiz pageview
+      var journey = Array.isArray(tpAttr.journey) ? tpAttr.journey.slice() : [];
+      journey.push({ u: window.location.pathname, t: Date.now(), d: 'quiz' });
+      journey.forEach(function(j){ if (!j.d) j.d = 'tp'; });
+      hidden.page_journey = JSON.stringify(journey);
+    }
+  } catch(e) {}
+
+  // Parity with GB snippet — capture landing page + HTTP referrer
+  hidden.landing_page = window.location.origin + window.location.pathname;
+  if (document.referrer) hidden.referrer = document.referrer;
+
+  // Fallback source for direct/organic visits (URL has no ?source=).
+  // Distinct sentinel from GB so the dashboard can split TP from GB direct.
+  if (!hidden.source) hidden.source = 'TinyPumperQuizInstapage';
+
+  function applyHidden() {
+    var w = document.getElementById('tf-tp-widget');
+    if (!w) return;
+    // Defense-in-depth: any non-string value gets JSON.stringify'd before
+    // serialization. Runs every call so late-arriving overrides (e.g. retry
+    // timers, rogue widgets) can't leak [object Object] through. Mirror of
+    // the GB snippet's guard inside buildSrc().
+    Object.keys(hidden).forEach(function (k) {
+      if (typeof hidden[k] === 'object' && hidden[k] !== null) {
+        hidden[k] = JSON.stringify(hidden[k]);
+      }
+    });
+    // encodeURIComponent on every value. Typeform's data-tf-hidden parser
+    // splits on ',' then '=' and stores the raw value — it does NOT
+    // decodeURIComponent — so we MUST encode anything that contains those
+    // delimiters (or JSON brackets/quotes) to survive the round-trip. The
+    // edge function (typeform-ga4-relay) safe-decodes on intake.
+    var s = Object.keys(hidden).map(function(k) {
+      return k + '=' + encodeURIComponent(hidden[k]);
+    }).join(',');
+    w.setAttribute('data-tf-hidden', s);
+  }
+  applyHidden();
+
+  // GA4 sets `_ga` asynchronously via GTM. If it wasn't there yet, re-read
+  // and update the attribute. Note: if embed.js already rendered the iframe,
+  // the late update may not propagate — accepted tradeoff for fresh visitors.
+  setTimeout(function () {
+    if (!hidden.ga_client_id) {
+      var late = readGaClientId();
+      if (late) { hidden.ga_client_id = late; applyHidden(); }
+    }
+  }, 1500);
+  setTimeout(function () {
+    var late = readGaClientId();
+    if (late && hidden.ga_client_id !== late) { hidden.ga_client_id = late; applyHidden(); }
+  }, 3500);
+
+  window.__gbAttributionTP = function () { return hidden; };
+})();
+</script>
+<script src="//embed.typeform.com/next/embed.js"></script>
+
+</body>
+</html>
