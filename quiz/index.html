@@ -122,9 +122,15 @@ body{display:flex;flex-direction:column;font-family:'Outfit',-apple-system,Blink
   hidden.landing_page = window.location.origin + window.location.pathname;
   if (document.referrer) hidden.referrer = document.referrer;
 
-  // Fallback source for direct/organic visits (URL has no ?source=).
-  // Distinct sentinel from GB so the dashboard can split TP from GB direct.
-  if (!hidden.source) hidden.source = 'TinyPumperQuizInstapage';
+  // Nothing downstream reads this field's value server-side (typeform-ga4-relay
+  // classifies off utm_source, not hidden.source) — it only surfaces raw in the
+  // Zapier Slack lead notification, so give it a real label instead of the
+  // Instapage-era placeholder that survived the July 2026 GitHub Pages port verbatim.
+  if (!hidden.source) {
+    hidden.source = hidden.utm_source
+      ? hidden.utm_source + (hidden.utm_medium ? '/' + hidden.utm_medium : '')
+      : (document.referrer ? 'referral' : 'direct');
+  }
 
   function applyHidden() {
     var w = document.getElementById('tf-tp-widget');
