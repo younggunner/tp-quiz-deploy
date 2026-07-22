@@ -115,6 +115,9 @@ body{display:flex;flex-direction:column;font-family:'Outfit',-apple-system,Blink
       journey.push({ u: window.location.pathname, t: Date.now(), d: 'quiz' });
       journey.forEach(function(j){ if (!j.d) j.d = 'tp'; });
       hidden.page_journey = JSON.stringify(journey);
+      // Readable mirror of page_journey — lets Slack/Make show a plain path
+      // string without parsing JSON, since Make has no JSON-array formula function.
+      hidden.page_journey_text = journey.map(function(j){ return j.u; }).join(' → ');
     }
   } catch(e) {}
 
