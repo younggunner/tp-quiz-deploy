@@ -93,7 +93,7 @@ body{display:flex;flex-direction:column;font-family:'Outfit',-apple-system,Blink
   if (!hidden.utm_source && !hidden.utm_medium && !hidden.utm_campaign) {
     try {
       var ft = JSON.parse(localStorage.getItem('gb_first_touch') || 'null');
-      if (ft) ['utm_source','utm_medium','utm_campaign','utm_content','utm_term','gclid','fbclid','landing_page','referrer'].forEach(function(k) {
+      if (ft) ['utm_source','utm_medium','utm_campaign','utm_content','utm_term','gclid','msclkid','fbclid','landing_page','referrer'].forEach(function(k) {
         if (ft[k] && !hidden[k]) hidden[k] = ft[k];
       });
     } catch(e) {}
@@ -107,7 +107,7 @@ body{display:flex;flex-direction:column;font-family:'Outfit',-apple-system,Blink
       var tpAttr = JSON.parse(tpAttrRaw);
       if (tpAttr.origin_referrer && !hidden.origin_referrer) hidden.origin_referrer = tpAttr.origin_referrer;
       // Pull UTMs from cookie when URL didn't have any (organic → /quiz directly)
-      ['utm_source','utm_medium','utm_campaign','utm_content','utm_term','gclid','fbclid'].forEach(function(k){
+      ['utm_source','utm_medium','utm_campaign','utm_content','utm_term','gclid','msclkid','fbclid'].forEach(function(k){
         if (tpAttr[k] && !hidden[k]) hidden[k] = tpAttr[k];
       });
       // Build page_journey: tinypumper.com hops (from cookie) + current quiz pageview
