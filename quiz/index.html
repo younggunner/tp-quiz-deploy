@@ -85,7 +85,7 @@ body{display:flex;flex-direction:column;font-family:'Outfit',-apple-system,Blink
   // already does this, but populating data-tf-hidden makes it explicit + survives
   // any Typeform behavior change.
   var params = new URLSearchParams(window.location.search);
-  ['utm_source','utm_medium','utm_campaign','utm_content','utm_term','fbclid','gclid','source'].forEach(function(k) {
+  ['utm_source','utm_medium','utm_campaign','utm_content','utm_term','fbclid','gclid','msclkid','source'].forEach(function(k) {
     var v = params.get(k);
     if (v) hidden[k] = v;
   });
