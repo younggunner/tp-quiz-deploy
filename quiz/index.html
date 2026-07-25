@@ -85,7 +85,7 @@ body{display:flex;flex-direction:column;font-family:'Outfit',-apple-system,Blink
   // already does this, but populating data-tf-hidden makes it explicit + survives
   // any Typeform behavior change.
   var params = new URLSearchParams(window.location.search);
-  ['utm_source','utm_medium','utm_campaign','utm_content','utm_term','fbclid','gclid','source'].forEach(function(k) {
+  ['utm_source','utm_medium','utm_campaign','utm_content','utm_term','fbclid','gclid','msclkid','source'].forEach(function(k) {
     var v = params.get(k);
     if (v) hidden[k] = v;
   });
@@ -115,6 +115,9 @@ body{display:flex;flex-direction:column;font-family:'Outfit',-apple-system,Blink
       journey.push({ u: window.location.pathname, t: Date.now(), d: 'quiz' });
       journey.forEach(function(j){ if (!j.d) j.d = 'tp'; });
       hidden.page_journey = JSON.stringify(journey);
+      // Readable mirror of page_journey — lets Slack/Make show a plain path
+      // string without parsing JSON, since Make has no JSON-array formula function.
+      hidden.page_journey_text = journey.map(function(j){ return j.u; }).join(' → ');
     }
   } catch(e) {}
 
@@ -122,9 +125,15 @@ body{display:flex;flex-direction:column;font-family:'Outfit',-apple-system,Blink
   hidden.landing_page = window.location.origin + window.location.pathname;
   if (document.referrer) hidden.referrer = document.referrer;
 
-  // Fallback source for direct/organic visits (URL has no ?source=).
-  // Distinct sentinel from GB so the dashboard can split TP from GB direct.
-  if (!hidden.source) hidden.source = 'TinyPumperQuizInstapage';
+  // Nothing downstream reads this field's value server-side (typeform-ga4-relay
+  // classifies off utm_source, not hidden.source) — it only surfaces raw in the
+  // Zapier Slack lead notification, so give it a real label instead of the
+  // Instapage-era placeholder that survived the July 2026 GitHub Pages port verbatim.
+  if (!hidden.source) {
+    hidden.source = hidden.utm_source
+      ? hidden.utm_source + (hidden.utm_medium ? '/' + hidden.utm_medium : '')
+      : (document.referrer ? 'referral' : 'direct');
+  }
 
   function applyHidden() {
     var w = document.getElementById('tf-tp-widget');
