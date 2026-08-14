@@ -45,6 +45,9 @@ body{display:flex;flex-direction:column;font-family:'Outfit',-apple-system,Blink
        data-tf-iframe-props="title=TinyPumper Quiz"
        data-tf-transitive-search-params
        data-tf-medium="snippet"
+       data-tf-on-ready="tfQuizReady"
+       data-tf-on-question-changed="tfQuizQuestion"
+       data-tf-on-submit="tfQuizSubmit"
        style="width:100%;height:100%;"></div>
 </div>
 
@@ -174,6 +177,48 @@ body{display:flex;flex-direction:column;font-family:'Outfit',-apple-system,Blink
   }, 3500);
 
   window.__gbAttributionTP = function () { return hidden; };
+})();
+</script>
+
+<!-- Quiz progress telemetry (Greg, 2026-08-14): which question do people
+     abandon at, per campaign? The Typeform embed SDK fires the data-tf-on-*
+     callbacks above (free, part of embed.js — no paid Typeform feature).
+     Each event beacons one row to the quiz-progress Supabase edge function;
+     analysis = last question_ref seen per visit with no submit row, joined
+     to campaign via the same utm fallback chain the hidden fields use.
+     Handlers MUST be defined before embed.js loads (it resolves the
+     data-tf-on-* names against window at render time). Never breaks the page. -->
+<script>
+(function () {
+  try {
+    var EP = 'https://nhdethynnmgrqlswqiqj.supabase.co/functions/v1/quiz-progress';
+    var vid = 'q' + Date.now().toString(36) + Math.random().toString(36).slice(2, 10);
+    var seq = 0;
+    var attr = { utm_source: '', utm_campaign: '', utm_term: '' };
+    try {
+      var h = (window.__gbAttributionTP && window.__gbAttributionTP()) || {};
+      attr.utm_source = h.utm_source || '';
+      attr.utm_campaign = h.utm_campaign || '';
+      attr.utm_term = h.utm_term || '';
+    } catch (e) {}
+    function beacon(event, formId, ref) {
+      try {
+        seq += 1;
+        var payload = JSON.stringify({
+          visit_id: vid, brand: 'tp', form_id: formId || '', event: event,
+          ref: ref || '', seq: seq,
+          utm_source: attr.utm_source, utm_campaign: attr.utm_campaign,
+          utm_term: attr.utm_term
+        });
+        if (navigator.sendBeacon) {
+          navigator.sendBeacon(EP, new Blob([payload], { type: 'text/plain' }));
+        }
+      } catch (e) {}
+    }
+    window.tfQuizReady = function (p) { beacon('ready', p && p.formId); };
+    window.tfQuizQuestion = function (p) { beacon('question', p && p.formId, p && p.ref); };
+    window.tfQuizSubmit = function (p) { beacon('submit', p && p.formId); };
+  } catch (e) { /* never break the quiz */ }
 })();
 </script>
 <script src="//embed.typeform.com/next/embed.js"></script>
