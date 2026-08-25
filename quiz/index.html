@@ -88,7 +88,7 @@ body{font-family:var(--f-body);overflow-x:hidden}
 }
 :root[data-variant="b"] body{display:block;font-size:17px;line-height:1.7}
 .v-b{min-height:0}
-.v-b .logo-bar{background:var(--bg-dark);padding:14px 20px;text-align:center;border-bottom:1px solid var(--border-dk)}
+.v-b .logo-bar{position:sticky;top:0;z-index:20;background:var(--bg-dark);padding:14px 20px;text-align:center;border-bottom:1px solid var(--border-dk)}
 .v-b .logo-bar img{height:52px;width:auto;vertical-align:middle}
 .b-wrap{max-width:760px;margin:0 auto;padding:0 24px}
 .b-hero{
@@ -161,9 +161,7 @@ body{font-family:var(--f-body);overflow-x:hidden}
 .moment--after{background:#232E26}
 .moment--after .moment-label{background:#2A3A2E;color:#8ABF9A}
 .moment--after .moment-text{color:#C0D9C6}
-.quiz-veil{position:fixed;inset:0;background:rgba(12,10,8,.8);opacity:0;pointer-events:none;z-index:8;transition:opacity .4s ease}
-html.quiz-focus .quiz-veil{opacity:1}
-.b-quiz{padding:36px 0 16px;position:relative;z-index:9}
+.b-quiz{padding:20px 0 28px;position:relative;z-index:9}
 .quiz-head{text-align:center;max-width:560px;margin:0 auto 18px}
 .quiz-kicker{font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin-bottom:8px}
 .quiz-head h2{font-family:var(--f-display);font-size:clamp(22px,3.4vw,30px);font-weight:400;color:#fff;margin:0 0 8px}
@@ -175,7 +173,7 @@ html.quiz-focus .quiz-veil{opacity:1}
   outline:2px solid var(--gold);
   transition:box-shadow .4s ease,transform .4s ease;
 }
-html.quiz-focus .quiz-card{box-shadow:0 0 0 4px var(--gold),0 28px 90px rgba(0,0,0,.55)}
+
 .quiz-card [data-tf-widget]{width:100% !important;min-height:420px;max-height:640px;height:auto !important}
 .quiz-card iframe{max-height:640px}
 .micro{
@@ -199,6 +197,7 @@ html.quiz-focus .quiz-card{box-shadow:0 0 0 4px var(--gold),0 28px 90px rgba(0,0
 .sig-name{font-weight:700;color:#fff}
 .sig-title{font-size:13px;color:var(--ink-muted-lt);line-height:1.4}
 .b-cta{padding:8px 0 48px;text-align:center}
+.b-cta-mid{padding:28px 0 8px;text-align:center}
 .page-footer{background:#141311;color:var(--ink-dim);text-align:center;padding:28px 20px 20px;font-size:13px;margin:0}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
 </style>
@@ -226,15 +225,36 @@ html.quiz-focus .quiz-card{box-shadow:0 0 0 4px var(--gold),0 28px 90px rgba(0,0
   </div>
 </div>
 
-<!-- VARIANT B: short reminder lander
-     snapshot of tinypumper-deploy/index.html hero copy, #moments (~:514),
-     guarantee (~:916) taken 2026-08-21. Press logos rehosted from homepage as-seen-in set.
-     No video (quiz is the job). -->
+<!-- VARIANT B: quiz first, then homepage hero + reminder sections. -->
 <div class="v-b">
-  <div class="quiz-veil" aria-hidden="true"></div>
   <div class="logo-bar">
     <img src="../assets/tp-logo-quiz.svg" alt="TinyPumper">
   </div>
+
+  <section class="b-quiz" id="tf-quiz">
+    <div class="b-wrap">
+      <div class="quiz-head">
+        <p class="quiz-kicker">See if you qualify</p>
+        <h2>Fill this out to see if you qualify</h2>
+        <p>This form is on the page. It does not open a new tab. Answer the questions here.</p>
+      </div>
+      <p class="quiz-start">Start the quiz below:</p>
+      <div class="quiz-card">
+        <div id="tf-tp-widget-b"
+             data-tf-widget="uVP2g9QP"
+             data-tf-opacity="100"
+             data-tf-inline-on-mobile
+             data-tf-auto-resize="360,640"
+             data-tf-iframe-props="title=TinyPumper Quiz"
+             data-tf-transitive-search-params
+             data-tf-medium="snippet"
+             data-tf-on-ready="tfQuizReady"
+             data-tf-on-question-changed="tfQuizQuestion"
+             data-tf-on-submit="tfQuizSubmit"></div>
+      </div>
+      <p class="micro">Not every operation is a fit for TinyPumper, and we'd rather tell you upfront. Find out if yours is, and get your custom price. 60 seconds. No credit card. No sales pitch.</p>
+    </div>
+  </section>
 
   <section class="b-hero">
     <div class="b-hero-inner">
@@ -249,7 +269,7 @@ html.quiz-focus .quiz-card{box-shadow:0 0 0 4px var(--gold),0 28px 90px rgba(0,0
           <li><strong>Lifetime replacement.</strong> If it breaks, we ship you a new one</li>
         </ul>
         <p class="hero-reciprocity">Here's a free rule of thumb: if you can't check your tank level without driving to the lease or calling your pumper, you're flying blind on wells that are producing (or not) whether you're watching or not.</p>
-        <a class="cta" href="#tf-quiz">See If You Qualify + Get Your Price</a>
+        <a class="cta" href="#tf-quiz">Back to the Quiz</a>
         <span class="cta-micro">Not every operation is a fit for TinyPumper, and we'd rather tell you upfront. Find out if yours is, and get your custom price. 60 seconds. No credit card. No sales pitch.</span>
       </div>
       <div class="hero-devices" aria-hidden="true">
@@ -306,31 +326,9 @@ html.quiz-focus .quiz-card{box-shadow:0 0 0 4px var(--gold),0 28px 90px rgba(0,0
           <p class="moment-text">You're at your kid's baseball game. You glance at your phone. All wells running. You watch the game.</p>
         </article>
       </div>
-    </div>
-  </section>
-
-  <section class="b-quiz" id="tf-quiz">
-    <div class="b-wrap">
-      <div class="quiz-head">
-        <p class="quiz-kicker">See if you qualify</p>
-        <h2>Fill this out to see if you qualify</h2>
-        <p>This form is on the page. It does not open a new tab. Answer the questions here.</p>
+      <div class="b-cta-mid">
+        <a class="cta" href="#tf-quiz">Back to the Quiz</a>
       </div>
-      <p class="quiz-start">Start the quiz below:</p>
-      <div class="quiz-card">
-        <div id="tf-tp-widget-b"
-             data-tf-widget="uVP2g9QP"
-             data-tf-opacity="100"
-             data-tf-inline-on-mobile
-             data-tf-auto-resize="360,640"
-             data-tf-iframe-props="title=TinyPumper Quiz"
-             data-tf-transitive-search-params
-             data-tf-medium="snippet"
-             data-tf-on-ready="tfQuizReady"
-             data-tf-on-question-changed="tfQuizQuestion"
-             data-tf-on-submit="tfQuizSubmit"></div>
-      </div>
-      <p class="micro">Not every operation is a fit for TinyPumper, and we'd rather tell you upfront. Find out if yours is, and get your custom price. 60 seconds. No credit card. No sales pitch.</p>
     </div>
   </section>
 
@@ -367,7 +365,7 @@ html.quiz-focus .quiz-card{box-shadow:0 0 0 4px var(--gold),0 28px 90px rgba(0,0
   </section>
 
   <div class="b-cta">
-    <a class="cta" href="#tf-quiz">See If You Qualify + Get Your Price</a>
+    <a class="cta" href="#tf-quiz">Back to the Quiz</a>
     <p class="micro">Not every operation is a fit for TinyPumper, and we'd rather tell you upfront. Find out if yours is, and get your custom price. 60 seconds. No credit card. No sales pitch.</p>
   </div>
 
@@ -381,16 +379,6 @@ html.quiz-focus .quiz-card{box-shadow:0 0 0 4px var(--gold),0 28px 90px rgba(0,0
   document.querySelectorAll(lose).forEach(function (el) {
     if (el.parentNode) el.parentNode.removeChild(el);
   });
-  if (document.documentElement.dataset.variant === 'b') {
-    var card = document.querySelector('.quiz-card');
-    if (card && 'IntersectionObserver' in window) {
-      var io = new IntersectionObserver(function (entries) {
-        var hit = entries[0];
-        document.documentElement.classList.toggle('quiz-focus', !!(hit && hit.isIntersecting && hit.intersectionRatio >= 0.4));
-      }, { threshold: [0.25, 0.4, 0.6, 0.8] });
-      io.observe(card);
-    }
-  }
 })();
 </script>
 
