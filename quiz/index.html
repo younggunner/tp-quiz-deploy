@@ -21,48 +21,372 @@
 })(window,document,'script','dataLayer','GTM-5PQGM83');
 </script>
 
+<!-- Assignment: DARK ship. Everyone gets layout A unless ?qv=b. -->
+<script>
+(function () {
+  function uuidv4() {
+    if (window.crypto && crypto.randomUUID) return crypto.randomUUID();
+    return ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g, function (c) {
+      return (c ^ (crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4)).toString(16);
+    });
+  }
+  var qv = '';
+  try { qv = (new URLSearchParams(window.location.search).get('qv') || '').toLowerCase(); } catch (e) {}
+  var arm, layout;
+  if (qv === 'b') { arm = 'b_forced'; layout = 'b'; }
+  else if (qv === 'a') { arm = 'a_forced'; layout = 'a'; }
+  else { arm = 'a'; layout = 'a'; }
+  document.documentElement.dataset.variant = layout;
+  window.__quizVariant = arm;
+  var uid;
+  try {
+    uid = localStorage.getItem('gb_uid');
+    if (!uid) { uid = uuidv4(); localStorage.setItem('gb_uid', uid); }
+  } catch (e) { uid = uuidv4(); }
+  window.__gbUid = uid;
+  window.dataLayer = window.dataLayer || [];
+  window.dataLayer.push({ event: 'quiz_variant_assigned', quiz_variant: arm });
+})();
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
 <style>
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
-html,body{height:100%;background:#1C1B18}
-body{display:flex;flex-direction:column;font-family:'Outfit',-apple-system,BlinkMacSystemFont,sans-serif}
-.logo-bar{background:#1C1B18;padding:14px 20px;text-align:center;flex-shrink:0}
-.logo-bar img{height:38px;width:auto;vertical-align:middle}
-.tf-wrap{flex:1 1 auto;min-height:0}
-#tf-tp-widget{width:100% !important;height:100% !important}
-.tf-micro{flex-shrink:0;padding:10px 20px 16px;text-align:center;color:#d4cfc4;font-size:13px;line-height:1.45;max-width:40em;margin:0 auto}
+:root{
+  --bg:#FAF8F5;--bg-warm:#F3EFE9;--bg-card:#FFF;
+  --bg-dark:#1C1B18;--bg-dark-mid:#26241F;
+  --gold:#C8993B;--gold-hover:#B58A2F;
+  --ink:#1C1B18;--ink-light:#FAF8F5;--ink-muted:#78736B;--ink-dim:#A8A29E;--ink-muted-lt:#A8A29E;
+  --green:#4D7C5A;--red:#994848;
+  --border:#E2DDD5;--border-dk:#3A3730;
+  --f-display:'Libre Baskerville',Georgia,serif;
+  --f-body:'Outfit',-apple-system,BlinkMacSystemFont,sans-serif;
+  --radius:8px;--radius-lg:12px;
+}
+html{scroll-behavior:smooth;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+body{font-family:var(--f-body);overflow-x:hidden}
+
+/* FOUC guard: hide both trees until data-variant is set, then prune removes the loser */
+.v-a,.v-b{display:none}
+:root[data-variant="a"] .v-a{display:flex;flex-direction:column;min-height:100%}
+:root[data-variant="b"] .v-b{display:block}
+
+/* CONTROL (full-viewport quiz) */
+:root[data-variant="a"],:root[data-variant="a"] body{height:100%;background:#1C1B18}
+:root[data-variant="a"] body{display:flex;flex-direction:column}
+.v-a .logo-bar{background:#1C1B18;padding:14px 20px;text-align:center;flex-shrink:0}
+.v-a .logo-bar img{height:38px;width:auto;vertical-align:middle}
+.v-a .tf-wrap{flex:1 1 auto;min-height:0}
+.v-a [data-tf-widget]{width:100% !important;height:100% !important}
+
+/* VARIANT B (short reminder) */
+:root[data-variant="b"],:root[data-variant="b"] body{height:auto;min-height:100%;background:var(--bg-dark);color:var(--ink-light)}
+:root[data-variant="b"] body{display:block;font-size:17px;line-height:1.7}
+.v-b .logo-bar{background:var(--bg-dark);padding:14px 20px;text-align:center;border-bottom:1px solid var(--border-dk)}
+.v-b .logo-bar img{height:52px;width:auto;vertical-align:middle}
+.b-wrap{max-width:760px;margin:0 auto;padding:0 24px}
+.b-hero{
+  position:relative;overflow:hidden;
+  background:url('../assets/hero-bg.webp') center/cover no-repeat;
+  padding:48px 24px 40px;
+}
+.b-hero::before{content:'';position:absolute;inset:0;background:linear-gradient(to right,rgba(28,27,24,.93) 0%,rgba(28,27,24,.8) 40%,rgba(50,38,10,.65) 100%);z-index:1}
+.b-hero::after{content:'';position:absolute;inset:0;background:rgba(140,110,30,.15);mix-blend-mode:color;z-index:1}
+.b-hero-inner{
+  max-width:1100px;margin:0 auto;position:relative;z-index:2;
+  display:flex;align-items:stretch;gap:48px;
+}
+.b-hero-copy{flex:1.618;min-width:0}
+.b-hero .pre{
+  font-size:14px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--gold);margin-bottom:16px;
+}
+.b-hero h1{
+  font-family:var(--f-display);font-size:clamp(28px,5.5vw,50px);font-weight:400;
+  letter-spacing:-.015em;line-height:1.2;color:var(--ink-light);margin:0 0 20px;
+}
+.b-hero .sub{color:var(--ink-muted-lt);font-size:clamp(17px,2.5vw,21px);margin:0 0 8px;line-height:1.55}
+.hero-authority{font-style:italic;font-size:15px;color:var(--ink-muted-lt);margin:8px 0 24px;line-height:1.6}
+.hero-bullets{margin:0 0 24px;display:flex;flex-direction:column;gap:12px}
+.hero-bullets li{font-size:16px;color:var(--ink-muted-lt);padding-left:24px;position:relative;line-height:1.55}
+.hero-bullets li::before{content:'';position:absolute;left:0;top:8px;width:10px;height:10px;border-radius:50%;background:var(--gold)}
+.hero-bullets strong{color:var(--ink-light)}
+.hero-reciprocity{font-size:15px;color:var(--ink-muted-lt);max-width:640px;margin:0 0 32px;line-height:1.7;font-style:italic}
+.hero-devices{
+  flex:1;position:relative;overflow:hidden;min-height:420px;
+  -webkit-mask-image:linear-gradient(to bottom,transparent 0%,#000 4%,#000 96%,transparent 100%);
+  mask-image:linear-gradient(to bottom,transparent 0%,#000 4%,#000 96%,transparent 100%);
+}
+.hero-devices-track{
+  position:absolute;top:0;left:0;right:0;
+  display:flex;flex-direction:column;align-items:center;gap:40px;
+  animation:runUp 30s linear infinite;
+}
+.hero-device{display:flex;flex-direction:column;align-items:center;gap:8px;flex-shrink:0}
+.hero-device img{width:280px;height:280px;object-fit:contain;filter:drop-shadow(0 8px 24px rgba(0,0,0,.45));display:block}
+.hero-device span{font-size:13px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--gold);text-align:center;opacity:.85}
+@keyframes runUp{0%{transform:translateY(0)}100%{transform:translateY(-50%)}}
+@media(prefers-reduced-motion:reduce){.hero-devices-track{animation:none}}
+@media(max-width:900px){
+  .b-hero-inner{flex-direction:column;gap:24px}
+  .hero-devices{min-height:360px;width:100%;order:2}
+  .b-hero-copy{order:1;width:100%}
+  .hero-device img{width:70vw;height:70vw;max-width:300px;max-height:300px}
+}
+.cta{
+  display:inline-flex;align-items:center;gap:8px;background:var(--gold);color:var(--bg-dark);
+  font-weight:600;font-size:16px;padding:16px 36px;border-radius:8px;text-decoration:none;
+  letter-spacing:.02em;text-transform:uppercase;transition:background .2s,transform .15s;
+}
+.cta:hover{background:var(--gold-hover);text-decoration:none;color:var(--bg-dark);transform:translateY(-1px)}
+.cta-micro{display:block;margin-top:10px;font-size:14px;font-style:italic;color:var(--ink-muted-lt)}
+.b-problem{padding:40px 0 8px}
+.b-problem h2{
+  font-family:var(--f-display);font-size:clamp(22px,3.4vw,30px);font-weight:400;
+  text-align:center;margin-bottom:24px;color:#fff;
+}
+.moments{display:grid;grid-template-columns:1fr 1fr;gap:2px;margin:24px 0 0;border-radius:16px;overflow:hidden}
+.moments__h{padding:14px 24px;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.1em}
+.moments__h--before{background:#3A2A2A;color:#D49A9A}
+.moments__h--after{background:#2A3A2E;color:#8ABF9A}
+.moments__cell{padding:24px;font-size:15px;line-height:1.65}
+.moments__cell--before{background:#2C2424;color:#D4BFBF}
+.moments__cell--after{background:#232E26;color:#C0D9C6}
+@media(max-width:600px){.moments{grid-template-columns:1fr}}
+.quiz-veil{position:fixed;inset:0;background:rgba(12,10,8,.8);opacity:0;pointer-events:none;z-index:8;transition:opacity .4s ease}
+html.quiz-focus .quiz-veil{opacity:1}
+.b-quiz{padding:36px 0 16px;position:relative;z-index:9}
+.quiz-head{text-align:center;max-width:560px;margin:0 auto 18px}
+.quiz-kicker{font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin-bottom:8px}
+.quiz-head h2{font-family:var(--f-display);font-size:clamp(22px,3.4vw,30px);font-weight:400;color:#fff;margin:0 0 8px}
+.quiz-head p{color:var(--ink-muted-lt);font-size:16px;line-height:1.55}
+.quiz-start{text-align:left;font-size:18px;font-weight:700;color:#fff;margin:0 0 10px}
+.quiz-card{
+  background:#fff;border-radius:var(--radius-lg);overflow:hidden;
+  box-shadow:0 12px 40px rgba(0,0,0,.28);
+  outline:2px solid var(--gold);
+  transition:box-shadow .4s ease,transform .4s ease;
+}
+html.quiz-focus .quiz-card{box-shadow:0 0 0 4px var(--gold),0 28px 90px rgba(0,0,0,.55)}
+.quiz-card [data-tf-widget]{width:100% !important;height:560px !important}
+@media(min-width:720px){.quiz-card [data-tf-widget]{height:640px !important}}
+.micro{
+  color:var(--ink-dim);font-size:14.5px;line-height:1.6;text-align:center;
+  max-width:640px;margin:14px auto 0;font-style:italic;
+}
+.b-press{padding:36px 0 8px;text-align:center}
+.b-press .label{font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-dim);margin-bottom:16px}
+.press-row{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:22px 28px}
+.press-row img{height:22px;width:auto;opacity:.7;filter:brightness(0) invert(1)}
+.b-video{padding:40px 0 8px;text-align:center}
+.b-video h2{font-family:var(--f-display);font-size:clamp(22px,3.4vw,30px);font-weight:400;margin-bottom:10px}
+.b-video .sub{color:var(--ink-dim);max-width:560px;margin:0 auto 24px;font-size:16px}
+.yt{
+  position:relative;width:100%;max-width:720px;margin:0 auto;aspect-ratio:16/9;
+  border-radius:12px;overflow:hidden;background:#000;cursor:pointer;
+  box-shadow:0 8px 32px rgba(0,0,0,.4);
+}
+.yt img{width:100%;height:100%;object-fit:cover;display:block}
+.yt svg{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:72px;height:72px;opacity:.9;filter:drop-shadow(0 4px 12px rgba(0,0,0,.5))}
+.b-guarantee{padding:40px 0}
+.guarantee-box{
+  border:2px solid var(--gold);border-radius:16px;padding:40px 36px;
+  max-width:720px;margin:0 auto;text-align:left;
+}
+.guarantee-box h2{font-family:var(--f-display);font-size:clamp(22px,3.2vw,28px);font-weight:400;margin-bottom:14px;color:#fff}
+.guarantee-box p{color:var(--ink-dim);margin-bottom:12px;font-size:16px}
+.guarantee-box strong{color:#fff}
+.sig{display:flex;align-items:center;gap:12px;margin-top:24px}
+.sig-photo{width:48px;height:48px;border-radius:50%;flex-shrink:0;background:#333 center/cover no-repeat}
+.sig-name{font-weight:700;color:#fff}
+.sig-title{font-size:13px;color:var(--ink-muted-lt);line-height:1.4}
+.b-cta{padding:8px 0 48px;text-align:center}
+.page-footer{background:#141311;color:var(--ink-dim);text-align:center;padding:28px 20px;font-size:13px}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
 </style>
 </head>
 <body>
 <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-5PQGM83" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
-<div class="logo-bar">
-  <img src="../assets/tp-logo-quiz.svg" alt="TinyPumper">
+<!-- CONTROL: current full-viewport quiz -->
+<div class="v-a">
+  <div class="logo-bar">
+    <img src="../assets/tp-logo-quiz.svg" alt="TinyPumper">
+  </div>
+  <div class="tf-wrap">
+    <div id="tf-tp-widget"
+         data-tf-widget="uVP2g9QP"
+         data-tf-opacity="100"
+         data-tf-iframe-props="title=TinyPumper Quiz"
+         data-tf-transitive-search-params
+         data-tf-medium="snippet"
+         data-tf-on-ready="tfQuizReady"
+         data-tf-on-question-changed="tfQuizQuestion"
+         data-tf-on-submit="tfQuizSubmit"
+         style="width:100%;height:100%;"></div>
+  </div>
 </div>
 
-<div class="tf-wrap">
-  <div id="tf-tp-widget"
-       data-tf-widget="uVP2g9QP"
-       data-tf-opacity="100"
-       data-tf-iframe-props="title=TinyPumper Quiz"
-       data-tf-transitive-search-params
-       data-tf-medium="snippet"
-       data-tf-on-ready="tfQuizReady"
-       data-tf-on-question-changed="tfQuizQuestion"
-       data-tf-on-submit="tfQuizSubmit"
-       style="width:100%;height:100%;"></div>
-</div>
-<p class="tf-micro">Not every operation is a fit for TinyPumper, and we'd rather tell you upfront. Find out if yours is, and get your custom price. 60 seconds. No credit card. No sales pitch.</p>
+<!-- VARIANT B: short reminder lander
+     snapshot of tinypumper-deploy/index.html hero copy, #moments (~:514), founder video (~:501),
+     guarantee (~:916) taken 2026-08-21. Press logos rehosted from homepage as-seen-in set. -->
+<div class="v-b">
+  <div class="quiz-veil" aria-hidden="true"></div>
+  <div class="logo-bar">
+    <img src="../assets/tp-logo-quiz.svg" alt="TinyPumper">
+  </div>
 
-<!-- Attribution script — ported VERBATIM from the live Instapage page (captured 2026-07-13).
-     ONE copy only. Sets data-tf-hidden BEFORE embed.js renders the iframe. -->
+  <section class="b-hero">
+    <div class="b-hero-inner">
+      <div class="b-hero-copy">
+        <p class="pre">For independent operators who want remote monitoring without the SCADA price tag</p>
+        <h1>Your Pumper Calls in Sick Tomorrow (or doesn't call at all...)<br>Do You Know What Happened on Your Wells Yesterday?</h1>
+        <p class="sub">24/7 well monitoring that installs in 10 minutes. No wires. No SCADA. No kidding.</p>
+        <p class="hero-authority">Built in the oil patch by pumpers, field supervisors, engineers, and operators like you. 15 years of feedback from the people who actually do the work.</p>
+        <ul class="hero-bullets">
+          <li><strong>Installs in 10 minutes.</strong> No electrician, no trenching, no third parties</li>
+          <li><strong>Zero dead zones.</strong> Auto-switching cellular + satellite. 100% continental US coverage.</li>
+          <li><strong>Lifetime replacement.</strong> If it breaks, we ship you a new one</li>
+        </ul>
+        <p class="hero-reciprocity">Here's a free rule of thumb: if you can't check your tank level without driving to the lease or calling your pumper, you're flying blind on wells that are producing (or not) whether you're watching or not.</p>
+        <a class="cta" href="#tf-quiz">See If You Qualify + Get Your Price</a>
+        <span class="cta-micro">Not every operation is a fit for TinyPumper, and we'd rather tell you upfront. Find out if yours is, and get your custom price. 60 seconds. No credit card. No sales pitch.</span>
+      </div>
+      <div class="hero-devices" aria-hidden="true">
+        <div class="hero-devices-track">
+          <div class="hero-device"><img src="../assets/device-tinypumper-gateway.webp" alt=""><span>Internet Gateway + Runtime Monitor</span></div>
+          <div class="hero-device"><img src="../assets/device-pressure-sensor.webp" alt=""><span>Pressure Sensor</span></div>
+          <div class="hero-device"><img src="../assets/device-greasebook-app.webp" alt=""><span>Simple Smartphone App</span></div>
+          <div class="hero-device"><img src="../assets/device-radar-tank-sensor.webp" alt=""><span>Tank Level Sensor</span></div>
+          <div class="hero-device"><img src="../assets/device-flow-turbine-sensor.webp" alt=""><span>H2O Turbine Meter</span></div>
+          <div class="hero-device"><img src="../assets/device-tinypumper-gateway.webp" alt=""><span>Internet Gateway + Runtime Monitor</span></div>
+          <div class="hero-device"><img src="../assets/device-pressure-sensor.webp" alt=""><span>Pressure Sensor</span></div>
+          <div class="hero-device"><img src="../assets/device-greasebook-app.webp" alt=""><span>Simple Smartphone App</span></div>
+          <div class="hero-device"><img src="../assets/device-radar-tank-sensor.webp" alt=""><span>Tank Level Sensor</span></div>
+          <div class="hero-device"><img src="../assets/device-flow-turbine-sensor.webp" alt=""><span>H2O Turbine Meter</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="b-problem">
+    <div class="b-wrap">
+      <h2>You already know these moments.</h2>
+      <div class="moments">
+        <div class="moments__h moments__h--before">Without TinyPumper</div>
+        <div class="moments__h moments__h--after">With TinyPumper</div>
+        <div class="moments__cell moments__cell--before">It's Friday at 5. You're wondering if your pumper checked that well on the back 40. You'll find out Monday. Maybe.</div>
+        <div class="moments__cell moments__cell--after">Your pumper taps "submit" and you see the gauge reading before he's back in his truck. From anywhere.</div>
+        <div class="moments__cell moments__cell--before">Production's been slipping for two weeks. You don't know it yet. Your JIB does.</div>
+        <div class="moments__cell moments__cell--after">You get an alert the hour production drops. Not two weeks later when the revenue check is light.</div>
+        <div class="moments__cell moments__cell--before">Compressor goes down at 2 AM. Nobody finds out until your pumper rolls up the next morning. 14 hours of lost production later.</div>
+        <div class="moments__cell moments__cell--after">Compressor down. Lease 14. Your team gets the alert, handles it, gets it back online. You find out over coffee.</div>
+        <div class="moments__cell moments__cell--before">You're at your kid's baseball game. Trying to watch the game. Thinking about your wells.</div>
+        <div class="moments__cell moments__cell--after">You're at your kid's baseball game. You glance at your phone. All wells running. You watch the game.</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="b-quiz" id="tf-quiz">
+    <div class="b-wrap">
+      <div class="quiz-head">
+        <p class="quiz-kicker">See if you qualify</p>
+        <h2>Fill this out to see if you qualify</h2>
+        <p>This form is on the page. It does not open a new tab. Answer the questions here.</p>
+      </div>
+      <p class="quiz-start">Start the quiz below:</p>
+      <div class="quiz-card">
+        <div id="tf-tp-widget-b"
+             data-tf-widget="uVP2g9QP"
+             data-tf-opacity="100"
+             data-tf-iframe-props="title=TinyPumper Quiz"
+             data-tf-transitive-search-params
+             data-tf-medium="snippet"
+             data-tf-on-ready="tfQuizReady"
+             data-tf-on-question-changed="tfQuizQuestion"
+             data-tf-on-submit="tfQuizSubmit"></div>
+      </div>
+      <p class="micro">Not every operation is a fit for TinyPumper, and we'd rather tell you upfront. Find out if yours is, and get your custom price. 60 seconds. No credit card. No sales pitch.</p>
+    </div>
+  </section>
+
+  <section class="b-press">
+    <div class="b-wrap">
+      <p class="label">As Seen In</p>
+      <div class="press-row">
+        <img src="../assets/press-rigzone.webp" alt="Rigzone">
+        <img src="../assets/press-spe.webp" alt="Society of Petroleum Engineers">
+        <img src="../assets/press-the-ogm.webp" alt="The OGM">
+        <img src="../assets/press-epmag.webp" alt="E&amp;P Magazine">
+        <img src="../assets/press-american-og-reporter.webp" alt="The American Oil &amp; Gas Reporter">
+        <img src="../assets/press-oilvoice.webp" alt="OilVoice">
+      </div>
+    </div>
+  </section>
+
+  <section class="b-video">
+    <div class="b-wrap">
+      <h2>Hear It Straight from the Founder</h2>
+      <p class="sub">Ten minutes. No fluff. Just a plain-spoken walkthrough of what TinyPumper does, why we built it, and why it works for operators like you.</p>
+      <div class="yt" id="yt-player" onclick="this.innerHTML='<iframe src=\'https://www.youtube.com/embed/8Bbas9bTxoc?autoplay=1&rel=0&modestbranding=1\' title=\'TinyPumper Overview\' frameborder=\'0\' allow=\'accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope;picture-in-picture\' allowfullscreen style=\'position:absolute;top:0;left:0;width:100%;height:100%\'></iframe>';this.style.cursor='default';this.onclick=null">
+        <img src="https://img.youtube.com/vi/8Bbas9bTxoc/hqdefault.jpg" alt="TinyPumper Overview Video" loading="lazy">
+        <svg viewBox="0 0 68 48"><path d="M66.52 7.74c-.78-2.93-2.49-5.41-5.42-6.19C55.79.13 34 0 34 0S12.21.13 6.9 1.55C3.97 2.33 2.27 4.81 1.48 7.74.06 13.05 0 24 0 24s.06 10.95 1.48 16.26c.78 2.93 2.49 5.41 5.42 6.19C12.21 47.87 34 48 34 48s21.79-.13 27.1-1.55c2.93-.78 4.64-3.26 5.42-6.19C67.94 34.95 68 24 68 24s-.06-10.95-1.48-16.26z" fill="red"/><path d="M45 24L27 14v20" fill="#fff"/></svg>
+      </div>
+    </div>
+  </section>
+
+  <section class="b-guarantee">
+    <div class="b-wrap">
+      <div class="guarantee-box">
+        <h2>60-Day Guarantee. "Love It or Shove It."</h2>
+        <p>You try TinyPumper for 60 days. Install it. Beat on it. Let your pumper beat on it. Check your tanks from your kid's soccer game. Pull it up at dinner with your partner.</p>
+        <p>If after 60 days you don't think it's worth every penny? Send it back. Full refund. <strong>We'll even pay the return shipping.</strong></p>
+        <p>No hoops. No "retention department." No hard feelings.</p>
+        <div class="sig">
+          <div class="sig-photo" style="background-image:url('https://theogm.com/wp-content/uploads/2014/06/Greg-Archbald.jpg')"></div>
+          <div>
+            <div class="sig-name">Greg Archbald</div>
+            <div class="sig-title">Perpetual student of the oil field, founder of TinyPumper</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="b-cta">
+    <a class="cta" href="#tf-quiz">See If You Qualify + Get Your Price</a>
+    <p class="micro">Not every operation is a fit for TinyPumper, and we'd rather tell you upfront. Find out if yours is, and get your custom price. 60 seconds. No credit card. No sales pitch.</p>
+  </div>
+
+  <footer class="page-footer">TinyPumper. All rights reserved.</footer>
+</div>
+
 <script>
 (function () {
-  function uuidv4() {
-    if (window.crypto && crypto.randomUUID) return crypto.randomUUID();
-    return ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g, function(c){
-      return (c ^ (crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c/4)).toString(16);
-    });
+  var keep = document.documentElement.dataset.variant === 'b' ? '.v-b' : '.v-a';
+  var lose = keep === '.v-b' ? '.v-a' : '.v-b';
+  document.querySelectorAll(lose).forEach(function (el) {
+    if (el.parentNode) el.parentNode.removeChild(el);
+  });
+  if (document.documentElement.dataset.variant === 'b') {
+    var card = document.querySelector('.quiz-card');
+    if (card && 'IntersectionObserver' in window) {
+      var io = new IntersectionObserver(function (entries) {
+        var hit = entries[0];
+        document.documentElement.classList.toggle('quiz-focus', !!(hit && hit.isIntersecting && hit.intersectionRatio >= 0.4));
+      }, { threshold: [0.25, 0.4, 0.6, 0.8] });
+      io.observe(card);
+    }
   }
+})();
+</script>
+
+<!-- Attribution script. ONE copy. Consumes window.__gbUid (minted above). Writes hidden onto every remaining widget. -->
+<script>
+(function () {
   function readCookie(name) {
     var m = document.cookie.match('(^|;)\\s*' + name + '=([^;]+)');
     return m ? decodeURIComponent(m[2]) : '';
@@ -74,27 +398,32 @@ body{display:flex;flex-direction:column;font-family:'Outfit',-apple-system,Blink
     return (p.length >= 4) ? (p[2] + '.' + p[3]) : '';
   }
 
-  var gb_uid;
-  try {
-    gb_uid = localStorage.getItem('gb_uid');
-    if (!gb_uid) { gb_uid = uuidv4(); localStorage.setItem('gb_uid', gb_uid); }
-  } catch (e) { gb_uid = uuidv4(); }
+  var gb_uid = window.__gbUid;
+  if (!gb_uid) {
+    function uuidv4() {
+      if (window.crypto && crypto.randomUUID) return crypto.randomUUID();
+      return ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g, function(c){
+        return (c ^ (crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c/4)).toString(16);
+      });
+    }
+    try {
+      gb_uid = localStorage.getItem('gb_uid');
+      if (!gb_uid) { gb_uid = uuidv4(); localStorage.setItem('gb_uid', gb_uid); }
+    } catch (e) { gb_uid = uuidv4(); }
+  }
 
   var hidden = { gb_uid: gb_uid };
+  if (window.__quizVariant) hidden.quiz_variant = window.__quizVariant;
   var fbp = readCookie('_fbp');
   if (fbp) hidden.fbp = fbp;
   var gaId = readGaClientId();
   if (gaId) hidden.ga_client_id = gaId;
 
-  // Also pull UTMs from the page URL into hidden fields. data-tf-transitive-search-params
-  // already does this, but populating data-tf-hidden makes it explicit + survives
-  // any Typeform behavior change.
   var params = new URLSearchParams(window.location.search);
   ['utm_source','utm_medium','utm_campaign','utm_content','utm_term','fbclid','gclid','msclkid','source'].forEach(function(k) {
     var v = params.get(k);
     if (v) hidden[k] = v;
   });
-  // Fallback: first-touch UTMs persisted from an earlier site visit (e.g. Capterra → homepage → quiz)
   if (!hidden.utm_source && !hidden.utm_medium && !hidden.utm_campaign) {
     try {
       var ft = JSON.parse(localStorage.getItem('gb_first_touch') || 'null');
@@ -104,36 +433,24 @@ body{display:flex;flex-direction:column;font-family:'Outfit',-apple-system,Blink
     } catch(e) {}
   }
 
-  // Cross-domain attribution from tinypumper.com tp-attr.js (cookie set on .tinypumper.com).
-  // Replaces what Cometly used to capture for organic visitors.
   try {
     var tpAttrRaw = readCookie('tp_attr');
     if (tpAttrRaw) {
       var tpAttr = JSON.parse(tpAttrRaw);
       if (tpAttr.origin_referrer && !hidden.origin_referrer) hidden.origin_referrer = tpAttr.origin_referrer;
-      // Pull UTMs from cookie when URL didn't have any (organic → /quiz directly)
       ['utm_source','utm_medium','utm_campaign','utm_content','utm_term','gclid','msclkid','fbclid'].forEach(function(k){
         if (tpAttr[k] && !hidden[k]) hidden[k] = tpAttr[k];
       });
-      // Build page_journey: tinypumper.com hops (from cookie) + current quiz pageview
       var journey = Array.isArray(tpAttr.journey) ? tpAttr.journey.slice() : [];
       journey.push({ u: window.location.pathname, t: Date.now(), d: 'quiz' });
       journey.forEach(function(j){ if (!j.d) j.d = 'tp'; });
       hidden.page_journey = JSON.stringify(journey);
-      // Readable mirror of page_journey — lets Slack/Make show a plain path
-      // string without parsing JSON, since Make has no JSON-array formula function.
       hidden.page_journey_text = journey.map(function(j){ return j.u; }).join(' → ');
     }
   } catch(e) {}
 
-  // Parity with GB snippet — capture landing page + HTTP referrer
   hidden.landing_page = window.location.origin + window.location.pathname;
   if (document.referrer) hidden.referrer = document.referrer;
-
-  // Nothing downstream reads this field's value server-side (typeform-ga4-relay
-  // classifies off utm_source, not hidden.source) — it only surfaces raw in the
-  // Zapier Slack lead notification, so give it a real label instead of the
-  // Instapage-era placeholder that survived the July 2026 GitHub Pages port verbatim.
   if (!hidden.source) {
     hidden.source = hidden.utm_source
       ? hidden.utm_source + (hidden.utm_medium ? '/' + hidden.utm_medium : '')
@@ -141,32 +458,19 @@ body{display:flex;flex-direction:column;font-family:'Outfit',-apple-system,Blink
   }
 
   function applyHidden() {
-    var w = document.getElementById('tf-tp-widget');
-    if (!w) return;
-    // Defense-in-depth: any non-string value gets JSON.stringify'd before
-    // serialization. Runs every call so late-arriving overrides (e.g. retry
-    // timers, rogue widgets) can't leak [object Object] through. Mirror of
-    // the GB snippet's guard inside buildSrc().
+    var widgets = document.querySelectorAll('[data-tf-widget]');
     Object.keys(hidden).forEach(function (k) {
       if (typeof hidden[k] === 'object' && hidden[k] !== null) {
         hidden[k] = JSON.stringify(hidden[k]);
       }
     });
-    // encodeURIComponent on every value. Typeform's data-tf-hidden parser
-    // splits on ',' then '=' and stores the raw value — it does NOT
-    // decodeURIComponent — so we MUST encode anything that contains those
-    // delimiters (or JSON brackets/quotes) to survive the round-trip. The
-    // edge function (typeform-ga4-relay) safe-decodes on intake.
     var s = Object.keys(hidden).map(function(k) {
       return k + '=' + encodeURIComponent(hidden[k]);
     }).join(',');
-    w.setAttribute('data-tf-hidden', s);
+    widgets.forEach(function (w) { w.setAttribute('data-tf-hidden', s); });
   }
   applyHidden();
 
-  // GA4 sets `_ga` asynchronously via GTM. If it wasn't there yet, re-read
-  // and update the attribute. Note: if embed.js already rendered the iframe,
-  // the late update may not propagate — accepted tradeoff for fresh visitors.
   setTimeout(function () {
     if (!hidden.ga_client_id) {
       var late = readGaClientId();
@@ -212,7 +516,7 @@ body{display:flex;flex-direction:column;font-family:'Outfit',-apple-system,Blink
           ref: ref || '', seq: seq,
           utm_source: attr.utm_source, utm_campaign: attr.utm_campaign,
           utm_term: attr.utm_term,
-          variant: '', slot: 'main', ua_bucket: ua_bucket
+          variant: window.__quizVariant || '', slot: 'main', ua_bucket: ua_bucket
         });
         if (navigator.sendBeacon) {
           navigator.sendBeacon(EP, new Blob([payload], { type: 'text/plain' }));
@@ -223,8 +527,9 @@ body{display:flex;flex-direction:column;font-family:'Outfit',-apple-system,Blink
     window.tfQuizQuestion = function (p) { beacon('question', p && p.formId, p && p.ref); };
     window.tfQuizSubmit = function (p) { beacon('submit', p && p.formId); };
     // D10: widget entered the viewport. ready fires on iframe load even if below fold.
+    // querySelector after the pruner: exactly one [data-tf-widget] survives.
     try {
-      var el = document.getElementById('tf-tp-widget');
+      var el = document.querySelector('[data-tf-widget]');
       var seenFired = false;
       function fireSeen() {
         if (seenFired) return;
@@ -300,7 +605,7 @@ body{display:flex;flex-direction:column;font-family:'Outfit',-apple-system,Blink
           utm_term: ut, utm_content: uct, utm_source: us, utm_campaign: uc, attr_from: af,
           max_scroll_pct: maxScroll, active_seconds: active, word_count: words,
           entry_hash: (window.location.hash || '').slice(0, 40),
-          variant: ''
+          variant: window.__quizVariant || ''
         });
         if (navigator.sendBeacon) {
           navigator.sendBeacon(EP, new Blob([payload], { type: 'text/plain' }));

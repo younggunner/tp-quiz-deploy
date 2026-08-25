@@ -762,8 +762,13 @@ a:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
   var name    = params.get('name') || '';
   var email   = params.get('email') || '';
   var company = params.get('a1') || '';
-  var phone   = params.get('a2') || '';
+  var phone   = params.get('a2') || params.get('phone') || '';
   var info    = params.get('a3') || '';
+  // URLSearchParams treats an unencoded + as space. Restore +1… only.
+  if (phone) {
+    phone = phone.replace(/^\s+/, '');
+    if (phone.indexOf('+') === -1 && /^1[\s.-]?\d{3}/.test(phone)) phone = '+' + phone;
+  }
   var source  = params.get('source') || params.get('utm_source') || 'Not Set';
   var medium   = params.get('utm_medium')   || '';
   var campaign = params.get('utm_campaign') || '';
@@ -802,6 +807,14 @@ a:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
     + (campaign ? '&utm_campaign=' + encodeURIComponent(campaign) : '')
     + (term     ? '&utm_term='     + encodeURIComponent(term)     : '')
     + (attrToken ? '&utm_content=' + encodeURIComponent(attrToken) : '');
+
+  // Calendly's JS prefill object is ignored on the current embed (page URL
+  // fills, widget stays empty). Put invitee fields on the widget URL too.
+  if (name)    baseUrl += '&name=' + encodeURIComponent(name);
+  if (email)   baseUrl += '&email=' + encodeURIComponent(email);
+  if (company) baseUrl += '&a1=' + encodeURIComponent(company);
+  if (phone)   baseUrl += '&a2=' + encodeURIComponent(phone);
+  if (info)    baseUrl += '&a3=' + encodeURIComponent(info);
 
   // Fire first-touch attribution to Apps Script (idempotent, first-touch wins).
   if (email) {
