@@ -83,8 +83,11 @@ body{font-family:var(--f-body);overflow-x:hidden}
 .v-a [data-tf-widget]{width:100% !important;height:100% !important}
 
 /* VARIANT B (short reminder) */
-:root[data-variant="b"],:root[data-variant="b"] body{height:auto;min-height:100%;background:var(--bg-dark);color:var(--ink-light)}
+:root[data-variant="b"],:root[data-variant="b"] body{
+  height:auto !important;min-height:0 !important;background:var(--bg-dark);color:var(--ink-light)
+}
 :root[data-variant="b"] body{display:block;font-size:17px;line-height:1.7}
+.v-b{min-height:0}
 .v-b .logo-bar{background:var(--bg-dark);padding:14px 20px;text-align:center;border-bottom:1px solid var(--border-dk)}
 .v-b .logo-bar img{height:52px;width:auto;vertical-align:middle}
 .b-wrap{max-width:760px;margin:0 auto;padding:0 24px}
@@ -110,8 +113,8 @@ body{font-family:var(--f-body);overflow-x:hidden}
 }
 .b-hero .sub{color:var(--ink-muted-lt);font-size:clamp(17px,2.5vw,21px);margin:0 0 8px;line-height:1.55}
 .hero-authority{font-style:italic;font-size:15px;color:var(--ink-muted-lt);margin:8px 0 24px;line-height:1.6}
-.hero-bullets{margin:0 0 24px;display:flex;flex-direction:column;gap:12px}
-.hero-bullets li{font-size:16px;color:var(--ink-muted-lt);padding-left:24px;position:relative;line-height:1.55}
+.hero-bullets{margin:0 0 24px;display:flex;flex-direction:column;gap:12px;list-style:none}
+.hero-bullets li{font-size:16px;color:var(--ink-muted-lt);padding-left:24px;position:relative;line-height:1.55;list-style:none}
 .hero-bullets li::before{content:'';position:absolute;left:0;top:8px;width:10px;height:10px;border-radius:50%;background:var(--gold)}
 .hero-bullets strong{color:var(--ink-light)}
 .hero-reciprocity{font-size:15px;color:var(--ink-muted-lt);max-width:640px;margin:0 0 32px;line-height:1.7;font-style:italic}
@@ -148,14 +151,16 @@ body{font-family:var(--f-body);overflow-x:hidden}
   font-family:var(--f-display);font-size:clamp(22px,3.4vw,30px);font-weight:400;
   text-align:center;margin-bottom:24px;color:#fff;
 }
-.moments{display:grid;grid-template-columns:1fr 1fr;gap:2px;margin:24px 0 0;border-radius:16px;overflow:hidden}
-.moments__h{padding:14px 24px;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.1em}
-.moments__h--before{background:#3A2A2A;color:#D49A9A}
-.moments__h--after{background:#2A3A2E;color:#8ABF9A}
-.moments__cell{padding:24px;font-size:15px;line-height:1.65}
-.moments__cell--before{background:#2C2424;color:#D4BFBF}
-.moments__cell--after{background:#232E26;color:#C0D9C6}
-@media(max-width:600px){.moments{grid-template-columns:1fr}}
+.moments{display:flex;flex-direction:column;gap:10px;margin:24px 0 0}
+.moment{border-radius:12px;overflow:hidden}
+.moment-label{padding:10px 20px;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;margin:0}
+.moment-text{padding:18px 20px 20px;font-size:15px;line-height:1.65;margin:0}
+.moment--before{background:#2C2424}
+.moment--before .moment-label{background:#3A2A2A;color:#D49A9A}
+.moment--before .moment-text{color:#D4BFBF}
+.moment--after{background:#232E26}
+.moment--after .moment-label{background:#2A3A2E;color:#8ABF9A}
+.moment--after .moment-text{color:#C0D9C6}
 .quiz-veil{position:fixed;inset:0;background:rgba(12,10,8,.8);opacity:0;pointer-events:none;z-index:8;transition:opacity .4s ease}
 html.quiz-focus .quiz-veil{opacity:1}
 .b-quiz{padding:36px 0 16px;position:relative;z-index:9}
@@ -171,8 +176,8 @@ html.quiz-focus .quiz-veil{opacity:1}
   transition:box-shadow .4s ease,transform .4s ease;
 }
 html.quiz-focus .quiz-card{box-shadow:0 0 0 4px var(--gold),0 28px 90px rgba(0,0,0,.55)}
-.quiz-card [data-tf-widget]{width:100% !important;height:560px !important}
-@media(min-width:720px){.quiz-card [data-tf-widget]{height:640px !important}}
+.quiz-card [data-tf-widget]{width:100% !important;min-height:420px;max-height:640px;height:auto !important}
+.quiz-card iframe{max-height:640px}
 .micro{
   color:var(--ink-dim);font-size:14.5px;line-height:1.6;text-align:center;
   max-width:640px;margin:14px auto 0;font-style:italic;
@@ -204,7 +209,7 @@ html.quiz-focus .quiz-card{box-shadow:0 0 0 4px var(--gold),0 28px 90px rgba(0,0
 .sig-name{font-weight:700;color:#fff}
 .sig-title{font-size:13px;color:var(--ink-muted-lt);line-height:1.4}
 .b-cta{padding:8px 0 48px;text-align:center}
-.page-footer{background:#141311;color:var(--ink-dim);text-align:center;padding:28px 20px;font-size:13px}
+.page-footer{background:#141311;color:var(--ink-dim);text-align:center;padding:28px 20px 20px;font-size:13px;margin:0}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
 </style>
 </head>
@@ -220,6 +225,7 @@ html.quiz-focus .quiz-card{box-shadow:0 0 0 4px var(--gold),0 28px 90px rgba(0,0
     <div id="tf-tp-widget"
          data-tf-widget="uVP2g9QP"
          data-tf-opacity="100"
+         data-tf-inline-on-mobile
          data-tf-iframe-props="title=TinyPumper Quiz"
          data-tf-transitive-search-params
          data-tf-medium="snippet"
@@ -276,16 +282,38 @@ html.quiz-focus .quiz-card{box-shadow:0 0 0 4px var(--gold),0 28px 90px rgba(0,0
     <div class="b-wrap">
       <h2>You already know these moments.</h2>
       <div class="moments">
-        <div class="moments__h moments__h--before">Without TinyPumper</div>
-        <div class="moments__h moments__h--after">With TinyPumper</div>
-        <div class="moments__cell moments__cell--before">It's Friday at 5. You're wondering if your pumper checked that well on the back 40. You'll find out Monday. Maybe.</div>
-        <div class="moments__cell moments__cell--after">Your pumper taps "submit" and you see the gauge reading before he's back in his truck. From anywhere.</div>
-        <div class="moments__cell moments__cell--before">Production's been slipping for two weeks. You don't know it yet. Your JIB does.</div>
-        <div class="moments__cell moments__cell--after">You get an alert the hour production drops. Not two weeks later when the revenue check is light.</div>
-        <div class="moments__cell moments__cell--before">Compressor goes down at 2 AM. Nobody finds out until your pumper rolls up the next morning. 14 hours of lost production later.</div>
-        <div class="moments__cell moments__cell--after">Compressor down. Lease 14. Your team gets the alert, handles it, gets it back online. You find out over coffee.</div>
-        <div class="moments__cell moments__cell--before">You're at your kid's baseball game. Trying to watch the game. Thinking about your wells.</div>
-        <div class="moments__cell moments__cell--after">You're at your kid's baseball game. You glance at your phone. All wells running. You watch the game.</div>
+        <article class="moment moment--before">
+          <p class="moment-label">Without TinyPumper</p>
+          <p class="moment-text">It's Friday at 5. You're wondering if your pumper checked that well on the back 40. You'll find out Monday. Maybe.</p>
+        </article>
+        <article class="moment moment--after">
+          <p class="moment-label">With TinyPumper</p>
+          <p class="moment-text">Your pumper taps "submit" and you see the gauge reading before he's back in his truck. From anywhere.</p>
+        </article>
+        <article class="moment moment--before">
+          <p class="moment-label">Without TinyPumper</p>
+          <p class="moment-text">Production's been slipping for two weeks. You don't know it yet. Your JIB does.</p>
+        </article>
+        <article class="moment moment--after">
+          <p class="moment-label">With TinyPumper</p>
+          <p class="moment-text">You get an alert the hour production drops. Not two weeks later when the revenue check is light.</p>
+        </article>
+        <article class="moment moment--before">
+          <p class="moment-label">Without TinyPumper</p>
+          <p class="moment-text">Compressor goes down at 2 AM. Nobody finds out until your pumper rolls up the next morning. 14 hours of lost production later.</p>
+        </article>
+        <article class="moment moment--after">
+          <p class="moment-label">With TinyPumper</p>
+          <p class="moment-text">Compressor down. Lease 14. Your team gets the alert, handles it, gets it back online. You find out over coffee.</p>
+        </article>
+        <article class="moment moment--before">
+          <p class="moment-label">Without TinyPumper</p>
+          <p class="moment-text">You're at your kid's baseball game. Trying to watch the game. Thinking about your wells.</p>
+        </article>
+        <article class="moment moment--after">
+          <p class="moment-label">With TinyPumper</p>
+          <p class="moment-text">You're at your kid's baseball game. You glance at your phone. All wells running. You watch the game.</p>
+        </article>
       </div>
     </div>
   </section>
@@ -302,6 +330,8 @@ html.quiz-focus .quiz-card{box-shadow:0 0 0 4px var(--gold),0 28px 90px rgba(0,0
         <div id="tf-tp-widget-b"
              data-tf-widget="uVP2g9QP"
              data-tf-opacity="100"
+             data-tf-inline-on-mobile
+             data-tf-auto-resize="360,640"
              data-tf-iframe-props="title=TinyPumper Quiz"
              data-tf-transitive-search-params
              data-tf-medium="snippet"
