@@ -182,20 +182,29 @@ html[data-variant="b"],html[data-variant="b"] body{
 .cta:hover{background:var(--gold-hover);text-decoration:none;color:var(--bg-dark);transform:translateY(-1px)}
 .cta-micro{display:block;margin-top:10px;font-size:14px;font-style:italic;color:var(--ink-muted-lt)}
 .b-problem{padding:40px 0 8px}
+.b-problem .b-wrap{max-width:960px}
 .b-problem h2{
   font-family:var(--f-display);font-size:clamp(22px,3.4vw,30px);font-weight:400;
   text-align:center;margin-bottom:24px;color:#fff;
 }
-.moments{display:flex;flex-direction:column;gap:10px;margin:24px 0 0}
-.moment{border-radius:12px;overflow:hidden}
-.moment-label{padding:10px 20px;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;margin:0}
-.moment-text{padding:18px 20px 20px;font-size:15px;line-height:1.65;margin:0}
-.moment--before{background:#2C2424}
-.moment--before .moment-label{background:#3A2A2A;color:#D49A9A}
-.moment--before .moment-text{color:#D4BFBF}
-.moment--after{background:#232E26}
-.moment--after .moment-label{background:#2A3A2E;color:#8ABF9A}
-.moment--after .moment-text{color:#C0D9C6}
+.moments{display:grid;grid-template-columns:1fr 1fr;gap:2px;margin:24px 0 0;border-radius:16px;overflow:hidden}
+.moments__h{padding:14px 24px;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.1em}
+.moments__h--before{background:#3A2A2A;color:#D49A9A}
+.moments__h--after{background:#2A3A2E;color:#8ABF9A}
+.moments__cell{padding:24px;font-size:15px;line-height:1.65}
+.moments__cell--before{background:#2C2424;color:#D4BFBF}
+.moments__cell--after{background:#232E26;color:#C0D9C6}
+@media(max-width:600px){
+  .moments{grid-template-columns:1fr;gap:10px;overflow:visible;border-radius:0}
+  .moments__h{display:none}
+  .moments__cell{border-radius:12px;overflow:hidden;padding:0 20px 20px}
+  .moments__cell--before::before,.moments__cell--after::before{
+    display:block;padding:10px 20px;margin:0 -20px 16px;
+    font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;
+  }
+  .moments__cell--before::before{content:'Without TinyPumper';background:#3A2A2A;color:#D49A9A}
+  .moments__cell--after::before{content:'With TinyPumper';background:#2A3A2E;color:#8ABF9A}
+}
 .b-quiz{padding:20px 0 28px;position:relative;z-index:9}
 .quiz-head{text-align:center;max-width:560px;margin:0 auto 18px}
 .quiz-kicker{font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin-bottom:8px}
@@ -334,38 +343,16 @@ html.quiz-pop .quiz-card iframe{height:100% !important;min-height:100% !importan
     <div class="b-wrap">
       <h2>You already know these moments.</h2>
       <div class="moments">
-        <article class="moment moment--before">
-          <p class="moment-label">Without TinyPumper</p>
-          <p class="moment-text">It's Friday at 5. You're wondering if your pumper checked that well on the back 40. You'll find out Monday. Maybe.</p>
-        </article>
-        <article class="moment moment--after">
-          <p class="moment-label">With TinyPumper</p>
-          <p class="moment-text">Your pumper taps "submit" and you see the gauge reading before he's back in his truck. From anywhere.</p>
-        </article>
-        <article class="moment moment--before">
-          <p class="moment-label">Without TinyPumper</p>
-          <p class="moment-text">Production's been slipping for two weeks. You don't know it yet. Your JIB does.</p>
-        </article>
-        <article class="moment moment--after">
-          <p class="moment-label">With TinyPumper</p>
-          <p class="moment-text">You get an alert the hour production drops. Not two weeks later when the revenue check is light.</p>
-        </article>
-        <article class="moment moment--before">
-          <p class="moment-label">Without TinyPumper</p>
-          <p class="moment-text">Compressor goes down at 2 AM. Nobody finds out until your pumper rolls up the next morning. 14 hours of lost production later.</p>
-        </article>
-        <article class="moment moment--after">
-          <p class="moment-label">With TinyPumper</p>
-          <p class="moment-text">Compressor down. Lease 14. Your team gets the alert, handles it, gets it back online. You find out over coffee.</p>
-        </article>
-        <article class="moment moment--before">
-          <p class="moment-label">Without TinyPumper</p>
-          <p class="moment-text">You're at your kid's baseball game. Trying to watch the game. Thinking about your wells.</p>
-        </article>
-        <article class="moment moment--after">
-          <p class="moment-label">With TinyPumper</p>
-          <p class="moment-text">You're at your kid's baseball game. You glance at your phone. All wells running. You watch the game.</p>
-        </article>
+        <div class="moments__h moments__h--before">Without TinyPumper</div>
+        <div class="moments__h moments__h--after">With TinyPumper</div>
+        <div class="moments__cell moments__cell--before">It's Friday at 5. You're wondering if your pumper checked that well on the back 40. You'll find out Monday. Maybe.</div>
+        <div class="moments__cell moments__cell--after">Your pumper taps "submit" and you see the gauge reading before he's back in his truck. From anywhere.</div>
+        <div class="moments__cell moments__cell--before">Production's been slipping for two weeks. You don't know it yet. Your JIB does.</div>
+        <div class="moments__cell moments__cell--after">You get an alert the hour production drops. Not two weeks later when the revenue check is light.</div>
+        <div class="moments__cell moments__cell--before">Compressor goes down at 2 AM. Nobody finds out until your pumper rolls up the next morning. 14 hours of lost production later.</div>
+        <div class="moments__cell moments__cell--after">Compressor down. Lease 14. Your team gets the alert, handles it, gets it back online. You find out over coffee.</div>
+        <div class="moments__cell moments__cell--before">You're at your kid's baseball game. Trying to watch the game. Thinking about your wells.</div>
+        <div class="moments__cell moments__cell--after">You're at your kid's baseball game. You glance at your phone. All wells running. You watch the game.</div>
       </div>
       <div class="b-cta-mid">
         <a class="cta" href="#tf-quiz">Back to the Quiz</a>
