@@ -175,6 +175,13 @@ html[data-variant="b"],html[data-variant="b"] body{
 }
 .quiz-card [data-tf-widget]{width:100% !important;min-height:560px}
 .quiz-card iframe{width:100% !important;border:0;display:block}
+html.quiz-pop,html.quiz-pop body{overflow:hidden !important;height:100% !important;margin-bottom:0 !important}
+html.quiz-pop .quiz-card{
+  position:fixed;inset:0;z-index:50;width:100%;max-width:none;height:100%;height:100dvh;
+  border-radius:0;outline:none;box-shadow:none;background:#fff;
+}
+html.quiz-pop .quiz-card [data-tf-widget],
+html.quiz-pop .quiz-card iframe{height:100% !important;min-height:100% !important;max-height:none !important}
 .micro{
   color:var(--ink-dim);font-size:14.5px;line-height:1.6;text-align:center;
   max-width:640px;margin:14px auto 0;font-style:italic;
@@ -523,9 +530,19 @@ html[data-variant="b"],html[data-variant="b"] body{
       } catch (e) {}
     }
     window.tfQuizReady = function (p) { beacon('ready', p && p.formId); pinFooter(); };
-    window.tfQuizQuestion = function (p) { beacon('question', p && p.formId, p && p.ref); pinFooter(); };
+    window.tfQuizQuestion = function (p) {
+      beacon('question', p && p.formId, p && p.ref);
+      try {
+        var first = { sTbsRn: '38969d2818d6e750', uVP2g9QP: '01GV66FJERY2T6WMPAN9DFWW03' };
+        var ref = (p && p.ref) || '';
+        var fid = (p && p.formId) || '';
+        if (ref && first[fid] && ref !== first[fid]) popQuiz();
+      } catch (e) {}
+      pinFooter();
+    };
     window.tfQuizSubmit = function (p) { beacon('submit', p && p.formId); };
     window.tfQuizHeight = function (p) {
+      if (document.documentElement.classList.contains('quiz-pop')) return;
       try {
         var wrap = document.querySelector('.quiz-card [data-tf-widget]');
         var h = p && p.height;
@@ -537,6 +554,15 @@ html[data-variant="b"],html[data-variant="b"] body{
       } catch (e) {}
       pinFooter();
     };
+    function popQuiz() {
+      var card = document.querySelector('.quiz-card');
+      if (!card || document.documentElement.classList.contains('quiz-pop')) return;
+      var ph = document.createElement('div');
+      ph.setAttribute('aria-hidden', 'true');
+      ph.style.height = card.offsetHeight + 'px';
+      card.parentNode.insertBefore(ph, card);
+      document.documentElement.classList.add('quiz-pop');
+    }
     function pinFooter() {
       try {
         var f = document.querySelector('.page-footer');
