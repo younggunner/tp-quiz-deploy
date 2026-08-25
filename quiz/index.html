@@ -83,8 +83,9 @@ body{font-family:var(--f-body);overflow-x:hidden}
 .v-a [data-tf-widget]{width:100% !important;height:100% !important}
 
 /* VARIANT B (short reminder) */
-:root[data-variant="b"],:root[data-variant="b"] body{
-  height:auto !important;min-height:0 !important;background:var(--bg-dark);color:var(--ink-light)
+html[data-variant="b"],html[data-variant="b"] body{
+  height:auto !important;min-height:0 !important;max-height:none !important;
+  background:var(--bg-dark);color:var(--ink-light)
 }
 :root[data-variant="b"] body{display:block;font-size:17px;line-height:1.7}
 .v-b{min-height:0}
@@ -168,14 +169,12 @@ body{font-family:var(--f-body);overflow-x:hidden}
 .quiz-head p{color:var(--ink-muted-lt);font-size:16px;line-height:1.55}
 .quiz-start{text-align:left;font-size:18px;font-weight:700;color:#fff;margin:0 0 10px}
 .quiz-card{
-  background:#fff;border-radius:var(--radius-lg);overflow:hidden;
+  background:#fff;border-radius:var(--radius-lg);overflow:visible;
   box-shadow:0 12px 40px rgba(0,0,0,.28);
   outline:2px solid var(--gold);
-  transition:box-shadow .4s ease,transform .4s ease;
 }
-
-.quiz-card [data-tf-widget]{width:100% !important;min-height:420px;max-height:640px;height:auto !important}
-.quiz-card iframe{max-height:640px}
+.quiz-card [data-tf-widget]{width:100% !important;min-height:560px}
+.quiz-card iframe{width:100% !important;border:0;display:block}
 .micro{
   color:var(--ink-dim);font-size:14.5px;line-height:1.6;text-align:center;
   max-width:640px;margin:14px auto 0;font-style:italic;
@@ -196,9 +195,9 @@ body{font-family:var(--f-body);overflow-x:hidden}
 .sig-photo{width:48px;height:48px;border-radius:50%;flex-shrink:0;background:#333 center/cover no-repeat}
 .sig-name{font-weight:700;color:#fff}
 .sig-title{font-size:13px;color:var(--ink-muted-lt);line-height:1.4}
-.b-cta{padding:8px 0 48px;text-align:center}
+.b-cta{padding:8px 0 24px;text-align:center}
 .b-cta-mid{padding:28px 0 8px;text-align:center}
-.page-footer{background:#141311;color:var(--ink-dim);text-align:center;padding:28px 20px 20px;font-size:13px;margin:0}
+.page-footer{background:#141311;color:var(--ink-dim);text-align:center;padding:20px 20px 16px;font-size:13px;margin:0}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
 </style>
 </head>
@@ -244,12 +243,14 @@ body{font-family:var(--f-body);overflow-x:hidden}
              data-tf-widget="uVP2g9QP"
              data-tf-opacity="100"
              data-tf-inline-on-mobile
-             data-tf-auto-resize="360,640"
+             data-tf-disable-scroll
+             data-tf-auto-resize="520,1800"
              data-tf-iframe-props="title=TinyPumper Quiz"
              data-tf-transitive-search-params
              data-tf-medium="snippet"
              data-tf-on-ready="tfQuizReady"
              data-tf-on-question-changed="tfQuizQuestion"
+             data-tf-on-height-changed="tfQuizHeight"
              data-tf-on-submit="tfQuizSubmit"></div>
       </div>
       <p class="micro">Not every operation is a fit for TinyPumper, and we'd rather tell you upfront. Find out if yours is, and get your custom price. 60 seconds. No credit card. No sales pitch.</p>
@@ -521,9 +522,34 @@ body{font-family:var(--f-body);overflow-x:hidden}
         }
       } catch (e) {}
     }
-    window.tfQuizReady = function (p) { beacon('ready', p && p.formId); };
-    window.tfQuizQuestion = function (p) { beacon('question', p && p.formId, p && p.ref); };
+    window.tfQuizReady = function (p) { beacon('ready', p && p.formId); pinFooter(); };
+    window.tfQuizQuestion = function (p) { beacon('question', p && p.formId, p && p.ref); pinFooter(); };
     window.tfQuizSubmit = function (p) { beacon('submit', p && p.formId); };
+    window.tfQuizHeight = function (p) {
+      try {
+        var wrap = document.querySelector('.quiz-card [data-tf-widget]');
+        var h = p && p.height;
+        if (wrap && h) {
+          wrap.style.height = Math.ceil(h) + 'px';
+          var iframe = wrap.querySelector('iframe');
+          if (iframe) iframe.style.height = Math.ceil(h) + 'px';
+        }
+      } catch (e) {}
+      pinFooter();
+    };
+    function pinFooter() {
+      try {
+        var f = document.querySelector('.page-footer');
+        if (!f) return;
+        document.documentElement.style.height = 'auto';
+        document.body.style.height = 'auto';
+        document.body.style.marginBottom = '0';
+        var extra = document.documentElement.scrollHeight - (f.getBoundingClientRect().bottom + window.pageYOffset);
+        if (extra > 4 && extra < 600) document.body.style.marginBottom = (-Math.round(extra)) + 'px';
+      } catch (e) {}
+    }
+    setTimeout(pinFooter, 800);
+    setTimeout(pinFooter, 2500);
     // D10: widget entered the viewport. ready fires on iframe load even if below fold.
     // querySelector after the pruner: exactly one [data-tf-widget] survives.
     try {
