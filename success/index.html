@@ -144,5 +144,75 @@ body{font-family:var(--f-body);font-size:17px;background:var(--bg);color:var(--i
   <div class="page-footer__copy">&copy; 2026 Greasebook Inc. All rights reserved.</div>
 </footer>
 
+
+<!-- Engagement beacon (telemetry-only; MUST NOT write tp_attr). R13/WP5. -->
+<script>
+(function () {
+  try {
+    var EP = 'https://nhdethynnmgrqlswqiqj.supabase.co/functions/v1/lander-engagement';
+    var BRAND = 'tp';
+    var vid = 'v' + Date.now().toString(36) + Math.random().toString(36).slice(2, 10);
+    var active = 0, lastAct = Date.now(), maxScroll = 0, words = 0;
+    function onAct() { lastAct = Date.now(); }
+    ['scroll', 'mousemove', 'keydown', 'touchstart', 'click'].forEach(function (e) {
+      window.addEventListener(e, onAct, { passive: true });
+    });
+    setInterval(function () {
+      if (document.visibilityState === 'visible' && Date.now() - lastAct < 60000) {
+        active += 5;
+        if (active > 1800) active = 1800;
+      }
+    }, 5000);
+    function measure() {
+      var d = document.documentElement;
+      var h = Math.max(d.scrollHeight, document.body ? document.body.scrollHeight : 0);
+      if (h > 0) {
+        var pct = Math.round(100 * (window.scrollY + window.innerHeight) / h);
+        if (pct > maxScroll) maxScroll = pct > 100 ? 100 : pct;
+      }
+    }
+    window.addEventListener('scroll', measure, { passive: true });
+    function send() {
+      try {
+        measure();
+        if (!words && document.body) {
+          words = (document.body.innerText || '').split(/\s+/).filter(Boolean).length;
+        }
+        var p = new URLSearchParams(window.location.search);
+        var us = p.get('utm_source') || '', uc = p.get('utm_campaign') || '',
+            ut = p.get('utm_term') || '', uct = p.get('utm_content') || '',
+            af = (us || uc) ? 'url' : '';
+        if (!af) {
+          try {
+            var cm = document.cookie.match(/(?:^|; )tp_attr=([^;]*)/);
+            if (cm) {
+              var ck = JSON.parse(decodeURIComponent(cm[1])) || {};
+              us = ck.utm_source || ''; uc = ck.utm_campaign || '';
+              ut = ck.utm_term || ''; uct = ck.utm_content || '';
+              if (us || uc) af = 'cookie';
+            }
+          } catch (e) {}
+        }
+        var path = (window.location.pathname || '/').replace(/\/+$/, '') || '/';
+        var payload = JSON.stringify({
+          visit_id: vid, brand: BRAND, page: path,
+          utm_term: ut, utm_content: uct, utm_source: us, utm_campaign: uc, attr_from: af,
+          max_scroll_pct: maxScroll, active_seconds: active, word_count: words,
+          entry_hash: (window.location.hash || '').slice(0, 40),
+          variant: ''
+        });
+        if (navigator.sendBeacon) {
+          navigator.sendBeacon(EP, new Blob([payload], { type: 'text/plain' }));
+        }
+      } catch (e) {}
+    }
+    document.addEventListener('visibilitychange', function () {
+      if (document.visibilityState === 'hidden') send();
+    });
+    window.addEventListener('pagehide', send);
+  } catch (e) { /* never break the page */ }
+})();
+</script>
+
 </body>
 </html>

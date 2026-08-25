@@ -29,6 +29,7 @@ body{display:flex;flex-direction:column;font-family:'Outfit',-apple-system,Blink
 .logo-bar img{height:38px;width:auto;vertical-align:middle}
 .tf-wrap{flex:1 1 auto;min-height:0}
 #tf-tp-widget{width:100% !important;height:100% !important}
+.tf-micro{flex-shrink:0;padding:10px 20px 16px;text-align:center;color:#d4cfc4;font-size:13px;line-height:1.45;max-width:40em;margin:0 auto}
 </style>
 </head>
 <body>
@@ -50,6 +51,7 @@ body{display:flex;flex-direction:column;font-family:'Outfit',-apple-system,Blink
        data-tf-on-submit="tfQuizSubmit"
        style="width:100%;height:100%;"></div>
 </div>
+<p class="tf-micro">Not every operation is a fit for TinyPumper, and we'd rather tell you upfront. Find out if yours is, and get your custom price. 60 seconds. No credit card. No sales pitch.</p>
 
 <!-- Attribution script — ported VERBATIM from the live Instapage page (captured 2026-07-13).
      ONE copy only. Sets data-tf-hidden BEFORE embed.js renders the iframe. -->
@@ -195,6 +197,7 @@ body{display:flex;flex-direction:column;font-family:'Outfit',-apple-system,Blink
     var vid = 'q' + Date.now().toString(36) + Math.random().toString(36).slice(2, 10);
     var seq = 0;
     var attr = { utm_source: '', utm_campaign: '', utm_term: '' };
+    var ua_bucket = /FBAN|FBAV|FB_IAB|FB4A|Instagram/i.test(navigator.userAgent || '') ? 'facebook' : 'other';
     try {
       var h = (window.__gbAttributionTP && window.__gbAttributionTP()) || {};
       attr.utm_source = h.utm_source || '';
@@ -208,7 +211,8 @@ body{display:flex;flex-direction:column;font-family:'Outfit',-apple-system,Blink
           visit_id: vid, brand: 'tp', form_id: formId || '', event: event,
           ref: ref || '', seq: seq,
           utm_source: attr.utm_source, utm_campaign: attr.utm_campaign,
-          utm_term: attr.utm_term
+          utm_term: attr.utm_term,
+          variant: '', slot: 'main', ua_bucket: ua_bucket
         });
         if (navigator.sendBeacon) {
           navigator.sendBeacon(EP, new Blob([payload], { type: 'text/plain' }));
@@ -218,7 +222,96 @@ body{display:flex;flex-direction:column;font-family:'Outfit',-apple-system,Blink
     window.tfQuizReady = function (p) { beacon('ready', p && p.formId); };
     window.tfQuizQuestion = function (p) { beacon('question', p && p.formId, p && p.ref); };
     window.tfQuizSubmit = function (p) { beacon('submit', p && p.formId); };
+    // D10: widget entered the viewport. ready fires on iframe load even if below fold.
+    try {
+      var el = document.getElementById('tf-tp-widget');
+      var seenFired = false;
+      function fireSeen() {
+        if (seenFired) return;
+        seenFired = true;
+        beacon('seen', (el && el.getAttribute('data-tf-widget')) || '');
+      }
+      if (el && 'IntersectionObserver' in window) {
+        var io = new IntersectionObserver(function (entries) {
+          for (var i = 0; i < entries.length; i++) {
+            if (entries[i].isIntersecting) { fireSeen(); io.disconnect(); break; }
+          }
+        }, { threshold: 0.01 });
+        io.observe(el);
+      } else {
+        fireSeen();
+      }
+    } catch (e) {}
   } catch (e) { /* never break the quiz */ }
+})();
+</script>
+
+<!-- Engagement beacon (telemetry-only; MUST NOT write tp_attr). WP2b. -->
+<script>
+(function () {
+  try {
+    var EP = 'https://nhdethynnmgrqlswqiqj.supabase.co/functions/v1/lander-engagement';
+    var BRAND = 'tp';
+    var vid = 'v' + Date.now().toString(36) + Math.random().toString(36).slice(2, 10);
+    var active = 0, lastAct = Date.now(), maxScroll = 0, words = 0;
+    function onAct() { lastAct = Date.now(); }
+    ['scroll', 'mousemove', 'keydown', 'touchstart', 'click'].forEach(function (e) {
+      window.addEventListener(e, onAct, { passive: true });
+    });
+    setInterval(function () {
+      if (document.visibilityState === 'visible' && Date.now() - lastAct < 60000) {
+        active += 5;
+        if (active > 1800) active = 1800;
+      }
+    }, 5000);
+    function measure() {
+      var d = document.documentElement;
+      var h = Math.max(d.scrollHeight, document.body ? document.body.scrollHeight : 0);
+      if (h > 0) {
+        var pct = Math.round(100 * (window.scrollY + window.innerHeight) / h);
+        if (pct > maxScroll) maxScroll = pct > 100 ? 100 : pct;
+      }
+    }
+    window.addEventListener('scroll', measure, { passive: true });
+    function send() {
+      try {
+        measure();
+        if (!words && document.body) {
+          words = (document.body.innerText || '').split(/\s+/).filter(Boolean).length;
+        }
+        var p = new URLSearchParams(window.location.search);
+        var us = p.get('utm_source') || '', uc = p.get('utm_campaign') || '',
+            ut = p.get('utm_term') || '', uct = p.get('utm_content') || '',
+            af = (us || uc) ? 'url' : '';
+        if (!af) {
+          try {
+            var cm = document.cookie.match(/(?:^|; )tp_attr=([^;]*)/);
+            if (cm) {
+              var ck = JSON.parse(decodeURIComponent(cm[1])) || {};
+              us = ck.utm_source || ''; uc = ck.utm_campaign || '';
+              ut = ck.utm_term || ''; uct = ck.utm_content || '';
+              if (us || uc) af = 'cookie';
+            }
+          } catch (e) {}
+        }
+        var path = (window.location.pathname || '/').replace(/\/+$/, '') || '/';
+        var payload = JSON.stringify({
+          visit_id: vid, brand: BRAND, page: path,
+          utm_term: ut, utm_content: uct, utm_source: us, utm_campaign: uc, attr_from: af,
+          max_scroll_pct: maxScroll, active_seconds: active, word_count: words,
+          entry_hash: (window.location.hash || '').slice(0, 40),
+          variant: ''
+        });
+        if (navigator.sendBeacon) {
+          navigator.sendBeacon(EP, new Blob([payload], { type: 'text/plain' }));
+        }
+      } catch (e) {}
+    }
+    document.addEventListener('visibilitychange', function () {
+      if (document.visibilityState === 'hidden') send();
+    });
+    window.addEventListener('pagehide', send);
+  } catch (e) { /* never break the page */ }
 })();
 </script>
 <script src="//embed.typeform.com/next/embed.js"></script>

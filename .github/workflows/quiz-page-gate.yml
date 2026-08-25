@@ -1,0 +1,22 @@
+# Quiz-page gate (QS WP5). Encodes Part 0 hard rules as a test that cannot
+# silently regress. Neither quiz repo had any CI before this.
+name: Quiz page gate
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  quiz-page-gate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Planted-violation self-test
+        run: python3 .github/scripts/quiz_page_gate.py --self-test
+      - name: Gate published HTML
+        run: python3 .github/scripts/quiz_page_gate.py
