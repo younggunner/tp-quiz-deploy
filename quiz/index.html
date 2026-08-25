@@ -21,7 +21,7 @@
 })(window,document,'script','dataLayer','GTM-5PQGM83');
 </script>
 
-<!-- Assignment: DARK ship. Everyone gets layout A unless ?qv=b. -->
+<!-- Assignment: WP7 live. D1 recency split + hashArm(gb_uid). ?qv=a|b still forces. -->
 <script>
 (function () {
   function uuidv4() {
@@ -30,20 +30,54 @@
       return (c ^ (crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4)).toString(16);
     });
   }
+  function hashArm(uid) {
+    var c = (uid || '').slice(-1).toLowerCase();
+    var i = '0123456789abcdef'.indexOf(c);
+    if (i < 0) return 'a';
+    return i < 8 ? 'a' : 'b';
+  }
+  var MARKETING_HOSTS = [
+    'www.greasebook.com', 'greasebook.com', 'pages.greasebook.com',
+    'www.tinypumper.com', 'tinypumper.com'
+  ];
+  function refIsMarketing(ref) {
+    try { return ref && MARKETING_HOSTS.indexOf(new URL(ref).hostname) >= 0; }
+    catch (e) { return false; }
+  }
+  function recentMarketingHop(attrCookie, now, RECENCY_MS) {
+    try {
+      var j = (attrCookie && attrCookie.journey) || [];
+      for (var i = j.length - 1; i >= 0; i--) {
+        if (j[i].d === 'quiz') continue;
+        return (now - j[i].t) < RECENCY_MS;
+      }
+    } catch (e) {}
+    return false;
+  }
+  var RECENCY_MS = 45 * 60 * 1000;
   var qv = '';
   try { qv = (new URLSearchParams(window.location.search).get('qv') || '').toLowerCase(); } catch (e) {}
-  var arm, layout;
-  if (qv === 'b') { arm = 'b_forced'; layout = 'b'; }
-  else if (qv === 'a') { arm = 'a_forced'; layout = 'a'; }
-  else { arm = 'a'; layout = 'a'; }
-  document.documentElement.dataset.variant = layout;
-  window.__quizVariant = arm;
   var uid;
   try {
     uid = localStorage.getItem('gb_uid');
     if (!uid) { uid = uuidv4(); localStorage.setItem('gb_uid', uid); }
   } catch (e) { uid = uuidv4(); }
   window.__gbUid = uid;
+  var arm, layout;
+  if (qv === 'b') { arm = 'b_forced'; layout = 'b'; }
+  else if (qv === 'a') { arm = 'a_forced'; layout = 'a'; }
+  else {
+    var attrCookie = null;
+    try {
+      var m = (document.cookie || '').match(/(?:^|; )tp_attr=([^;]*)/);
+      if (m) attrCookie = JSON.parse(decodeURIComponent(m[1]));
+    } catch (e) {}
+    var same = refIsMarketing(document.referrer) || recentMarketingHop(attrCookie, Date.now(), RECENCY_MS);
+    if (same) { arm = 'a_same_session'; layout = 'a'; }
+    else { arm = hashArm(uid); layout = arm; }
+  }
+  document.documentElement.dataset.variant = layout;
+  window.__quizVariant = arm;
   window.dataLayer = window.dataLayer || [];
   window.dataLayer.push({ event: 'quiz_variant_assigned', quiz_variant: arm });
 })();
