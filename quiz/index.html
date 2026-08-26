@@ -151,16 +151,14 @@ html.quiz-pop .v-b .nav{display:none}
 .b-hero{
   position:relative;overflow:hidden;
   background:url('../assets/hero-bg.webp') center/cover no-repeat;
-  padding:20px 24px 12px;
+  padding:48px 24px 40px;
 }
 #tf-quiz{scroll-margin-top:72px}
-.b-hero .hero-authority,.b-hero .hero-bullets,.b-hero .hero-reciprocity,
-.b-hero .cta,.b-hero .cta-micro{display:none}
 .b-hero::before{content:'';position:absolute;inset:0;background:linear-gradient(to right,rgba(28,27,24,.93) 0%,rgba(28,27,24,.8) 40%,rgba(50,38,10,.65) 100%);z-index:1}
 .b-hero::after{content:'';position:absolute;inset:0;background:rgba(140,110,30,.15);mix-blend-mode:color;z-index:1}
 .b-hero-inner{
   max-width:1100px;margin:0 auto;position:relative;z-index:2;
-  display:flex;align-items:center;gap:48px;
+  display:flex;align-items:stretch;gap:48px;
 }
 .b-hero-copy{flex:1.618;min-width:0}
 .b-hero .pre{
@@ -331,7 +329,7 @@ html.quiz-pop .quiz-card iframe{height:100% !important;min-height:100% !importan
         <a class="cta" href="#tf-quiz">Start the Quiz</a>
         <span class="cta-micro">Not every operation is a fit for TinyPumper, and we'd rather tell you upfront. Find out if yours is, and get your custom price. 60 seconds. No credit card. No sales pitch.</span>
       </div>
-      <div class="hero-devices">
+      <div class="hero-devices" aria-hidden="true">
         <div class="hero-devices-track">
           <div class="hero-device"><img src="../assets/device-tinypumper-gateway.webp" alt=""><span>Internet Gateway + Runtime Monitor</span></div>
           <div class="hero-device"><img src="../assets/device-pressure-sensor.webp" alt=""><span>Pressure Sensor</span></div>
