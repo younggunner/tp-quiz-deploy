@@ -123,7 +123,7 @@ html[data-variant="b"],html[data-variant="b"] body{
 }
 :root[data-variant="b"] body{display:block;font-size:17px;line-height:1.7}
 .v-b{min-height:0}
-.v-b .nav{position:sticky;top:0;z-index:20;background:rgba(28,27,24,0.96);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid var(--border-dk)}
+.v-b .nav{position:fixed;top:0;left:0;right:0;z-index:20;background:rgba(28,27,24,0.96);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid var(--border-dk)}
 .v-b .nav__inner{max-width:1080px;margin:0 auto;padding:0 24px;display:flex;align-items:center;justify-content:space-between;height:60px}
 .v-b .nav__logo{display:flex;align-items:center;white-space:nowrap;text-decoration:none}
 .v-b .nav__logo img{height:42px;width:auto}
@@ -151,7 +151,8 @@ html.quiz-pop .v-b .nav{display:none}
 .b-hero{
   position:relative;overflow:hidden;
   background:url('../assets/hero-bg.webp') center/cover no-repeat;
-  padding:48px 24px 40px;
+  padding:108px 24px 40px;
+  min-height:100vh;
 }
 #tf-quiz{scroll-margin-top:72px}
 .b-hero::before{content:'';position:absolute;inset:0;background:linear-gradient(to right,rgba(28,27,24,.93) 0%,rgba(28,27,24,.8) 40%,rgba(50,38,10,.65) 100%);z-index:1}
@@ -159,6 +160,7 @@ html.quiz-pop .v-b .nav{display:none}
 .b-hero-inner{
   max-width:1100px;margin:0 auto;position:relative;z-index:2;
   display:flex;align-items:stretch;gap:48px;
+  min-height:calc(100vh - 148px);
 }
 .b-hero-copy{flex:1.618;min-width:0}
 .b-hero .pre{
@@ -177,7 +179,7 @@ html.quiz-pop .v-b .nav{display:none}
 .hero-bullets strong{color:var(--ink-light)}
 .hero-reciprocity{font-size:15px;color:var(--ink-muted-lt);max-width:640px;margin:0 0 32px;line-height:1.7;font-style:italic}
 .hero-devices{
-  flex:1;position:relative;overflow:hidden;min-height:420px;
+  flex:1 1 36%;min-width:0;min-height:0;position:relative;overflow:hidden;
   -webkit-mask-image:linear-gradient(to bottom,transparent 0%,#000 4%,#000 96%,transparent 100%);
   mask-image:linear-gradient(to bottom,transparent 0%,#000 4%,#000 96%,transparent 100%);
 }
@@ -192,10 +194,12 @@ html.quiz-pop .v-b .nav{display:none}
 @keyframes runUp{0%{transform:translateY(0)}100%{transform:translateY(-50%)}}
 @media(prefers-reduced-motion:reduce){.hero-devices-track{animation:none}}
 @media(max-width:900px){
-  .b-hero-inner{flex-direction:column;gap:24px}
-  .hero-devices{min-height:360px;width:100%;order:2}
-  .b-hero-copy{order:1;width:100%}
-  .hero-device img{width:70vw;height:70vw;max-width:300px;max-height:300px}
+  .b-hero-inner{gap:20px}
+  .hero-device img{width:180px;height:180px}
+}
+@media(max-width:640px){
+  .b-hero-inner{gap:12px}
+  .hero-device img{width:120px;height:120px}
 }
 .cta{
   display:inline-flex;align-items:center;gap:8px;background:var(--gold);color:var(--bg-dark);
