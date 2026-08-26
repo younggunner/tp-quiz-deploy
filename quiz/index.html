@@ -129,7 +129,12 @@ html[data-variant="b"],html[data-variant="b"] body{
 .b-hero{
   position:relative;overflow:hidden;
   background:url('../assets/hero-bg.webp') center/cover no-repeat;
-  padding:48px 24px 40px;
+  padding:20px 24px 12px;
+}
+#tf-quiz{scroll-margin-top:72px}
+@media(max-width:767px){
+  .b-hero .hero-authority,.b-hero .hero-bullets,.b-hero .hero-reciprocity,
+  .b-hero .cta,.b-hero .cta-micro{display:none}
 }
 .b-hero::before{content:'';position:absolute;inset:0;background:linear-gradient(to right,rgba(28,27,24,.93) 0%,rgba(28,27,24,.8) 40%,rgba(50,38,10,.65) 100%);z-index:1}
 .b-hero::after{content:'';position:absolute;inset:0;background:rgba(140,110,30,.15);mix-blend-mode:color;z-index:1}
@@ -137,6 +142,12 @@ html[data-variant="b"],html[data-variant="b"] body{
   max-width:1100px;margin:0 auto;position:relative;z-index:2;
   display:flex;align-items:stretch;gap:48px;
 }
+.b-visual{
+  position:relative;overflow:hidden;min-height:420px;
+  background:url('../assets/hero-bg.webp') center/cover no-repeat;
+}
+.b-visual::before{content:'';position:absolute;inset:0;background:linear-gradient(to right,rgba(28,27,24,.93) 0%,rgba(28,27,24,.8) 40%,rgba(50,38,10,.65) 100%);z-index:1}
+.b-visual .hero-devices{position:relative;z-index:2;min-height:420px;width:100%;flex:none}
 .b-hero-copy{flex:1.618;min-width:0}
 .b-hero .pre{
   font-size:14px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;
@@ -205,8 +216,8 @@ html[data-variant="b"],html[data-variant="b"] body{
   .moments__cell--before::before{content:'Without TinyPumper';background:#3A2A2A;color:#D49A9A}
   .moments__cell--after::before{content:'With TinyPumper';background:#2A3A2E;color:#8ABF9A}
 }
-.b-quiz{padding:20px 0 28px;position:relative;z-index:9}
-.quiz-head{text-align:center;max-width:560px;margin:0 auto 18px}
+.b-quiz{padding:8px 0 28px;position:relative;z-index:9}
+.quiz-head{text-align:center;max-width:560px;margin:0 auto 10px}
 .quiz-kicker{font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin-bottom:8px}
 .quiz-head h2{font-family:var(--f-display);font-size:clamp(22px,3.4vw,30px);font-weight:400;color:#fff;margin:0 0 8px}
 .quiz-head p{color:var(--ink-muted-lt);font-size:16px;line-height:1.55}
@@ -274,11 +285,30 @@ html.quiz-pop .quiz-card iframe{height:100% !important;min-height:100% !importan
   </div>
 </div>
 
-<!-- VARIANT B: quiz first, then homepage hero + reminder sections. -->
+<!-- VARIANT B: compact hero, then quiz (above the fold), then reminder sections. -->
 <div class="v-b">
   <div class="logo-bar">
     <img src="../assets/tp-logo-quiz.svg" alt="TinyPumper">
   </div>
+
+  <section class="b-hero">
+    <div class="b-hero-inner">
+      <div class="b-hero-copy">
+        <p class="pre">For independent operators who want remote monitoring without the SCADA price tag</p>
+        <h1>Your Pumper Calls in Sick Tomorrow (or doesn't call at all...)<br>Do You Know What Happened on Your Wells Yesterday?</h1>
+        <p class="sub">24/7 well monitoring that installs in 10 minutes. No wires. No SCADA. No kidding.</p>
+        <p class="hero-authority">Built in the oil patch by pumpers, field supervisors, engineers, and operators like you. 15 years of feedback from the people who actually do the work.</p>
+        <ul class="hero-bullets">
+          <li><strong>Installs in 10 minutes.</strong> No electrician, no trenching, no third parties</li>
+          <li><strong>Zero dead zones.</strong> Auto-switching cellular + satellite. 100% continental US coverage.</li>
+          <li><strong>Lifetime replacement.</strong> If it breaks, we ship you a new one</li>
+        </ul>
+        <p class="hero-reciprocity">Here's a free rule of thumb: if you can't check your tank level without driving to the lease or calling your pumper, you're flying blind on wells that are producing (or not) whether you're watching or not.</p>
+        <a class="cta" href="#tf-quiz">Start the Quiz</a>
+        <span class="cta-micro">Not every operation is a fit for TinyPumper, and we'd rather tell you upfront. Find out if yours is, and get your custom price. 60 seconds. No credit card. No sales pitch.</span>
+      </div>
+    </div>
+  </section>
 
   <section class="b-quiz" id="tf-quiz">
     <div class="b-wrap">
@@ -306,35 +336,19 @@ html.quiz-pop .quiz-card iframe{height:100% !important;min-height:100% !importan
     </div>
   </section>
 
-  <section class="b-hero">
-    <div class="b-hero-inner">
-      <div class="b-hero-copy">
-        <p class="pre">For independent operators who want remote monitoring without the SCADA price tag</p>
-        <h1>Your Pumper Calls in Sick Tomorrow (or doesn't call at all...)<br>Do You Know What Happened on Your Wells Yesterday?</h1>
-        <p class="sub">24/7 well monitoring that installs in 10 minutes. No wires. No SCADA. No kidding.</p>
-        <p class="hero-authority">Built in the oil patch by pumpers, field supervisors, engineers, and operators like you. 15 years of feedback from the people who actually do the work.</p>
-        <ul class="hero-bullets">
-          <li><strong>Installs in 10 minutes.</strong> No electrician, no trenching, no third parties</li>
-          <li><strong>Zero dead zones.</strong> Auto-switching cellular + satellite. 100% continental US coverage.</li>
-          <li><strong>Lifetime replacement.</strong> If it breaks, we ship you a new one</li>
-        </ul>
-        <p class="hero-reciprocity">Here's a free rule of thumb: if you can't check your tank level without driving to the lease or calling your pumper, you're flying blind on wells that are producing (or not) whether you're watching or not.</p>
-        <a class="cta" href="#tf-quiz">Back to the Quiz</a>
-        <span class="cta-micro">Not every operation is a fit for TinyPumper, and we'd rather tell you upfront. Find out if yours is, and get your custom price. 60 seconds. No credit card. No sales pitch.</span>
-      </div>
-      <div class="hero-devices" aria-hidden="true">
-        <div class="hero-devices-track">
-          <div class="hero-device"><img src="../assets/device-tinypumper-gateway.webp" alt=""><span>Internet Gateway + Runtime Monitor</span></div>
-          <div class="hero-device"><img src="../assets/device-pressure-sensor.webp" alt=""><span>Pressure Sensor</span></div>
-          <div class="hero-device"><img src="../assets/device-greasebook-app.webp" alt=""><span>Simple Smartphone App</span></div>
-          <div class="hero-device"><img src="../assets/device-radar-tank-sensor.webp" alt=""><span>Tank Level Sensor</span></div>
-          <div class="hero-device"><img src="../assets/device-flow-turbine-sensor.webp" alt=""><span>H2O Turbine Meter</span></div>
-          <div class="hero-device"><img src="../assets/device-tinypumper-gateway.webp" alt=""><span>Internet Gateway + Runtime Monitor</span></div>
-          <div class="hero-device"><img src="../assets/device-pressure-sensor.webp" alt=""><span>Pressure Sensor</span></div>
-          <div class="hero-device"><img src="../assets/device-greasebook-app.webp" alt=""><span>Simple Smartphone App</span></div>
-          <div class="hero-device"><img src="../assets/device-radar-tank-sensor.webp" alt=""><span>Tank Level Sensor</span></div>
-          <div class="hero-device"><img src="../assets/device-flow-turbine-sensor.webp" alt=""><span>H2O Turbine Meter</span></div>
-        </div>
+  <section class="b-visual" aria-hidden="true">
+    <div class="hero-devices">
+      <div class="hero-devices-track">
+        <div class="hero-device"><img src="../assets/device-tinypumper-gateway.webp" alt=""><span>Internet Gateway + Runtime Monitor</span></div>
+        <div class="hero-device"><img src="../assets/device-pressure-sensor.webp" alt=""><span>Pressure Sensor</span></div>
+        <div class="hero-device"><img src="../assets/device-greasebook-app.webp" alt=""><span>Simple Smartphone App</span></div>
+        <div class="hero-device"><img src="../assets/device-radar-tank-sensor.webp" alt=""><span>Tank Level Sensor</span></div>
+        <div class="hero-device"><img src="../assets/device-flow-turbine-sensor.webp" alt=""><span>H2O Turbine Meter</span></div>
+        <div class="hero-device"><img src="../assets/device-tinypumper-gateway.webp" alt=""><span>Internet Gateway + Runtime Monitor</span></div>
+        <div class="hero-device"><img src="../assets/device-pressure-sensor.webp" alt=""><span>Pressure Sensor</span></div>
+        <div class="hero-device"><img src="../assets/device-greasebook-app.webp" alt=""><span>Simple Smartphone App</span></div>
+        <div class="hero-device"><img src="../assets/device-radar-tank-sensor.webp" alt=""><span>Tank Level Sensor</span></div>
+        <div class="hero-device"><img src="../assets/device-flow-turbine-sensor.webp" alt=""><span>H2O Turbine Meter</span></div>
       </div>
     </div>
   </section>
