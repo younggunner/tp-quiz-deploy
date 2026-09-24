@@ -775,7 +775,17 @@ a:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
   var term     = params.get('utm_term')     || '';
   var content  = params.get('utm_content')  || '';
   var gclid    = params.get('gclid')        || '';
+  var msclkid  = params.get('msclkid')      || '';
   var fbclid   = params.get('fbclid')       || '';
+  var clickAtParam = params.get('click_at') || '';
+  function parseClickAtMs(raw) {
+    if (!raw) return '';
+    if (/^\d{12,13}$/.test(raw)) return raw;
+    var t = Date.parse(raw);
+    if (isNaN(t)) return '';
+    return String(t);
+  }
+  var clickAtMs = parseClickAtMs(clickAtParam);
 
   // T6 — real GA4 client_id from _ga cookie (format: GA1.1.<cid>.<ts>)
   function getGaClientId(){
@@ -792,6 +802,8 @@ a:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
     if (gaClientId) parts.push('gacid_' + gaClientId);
     if (gclid)      parts.push('gclid_' + gclid);
     if (fbclid)     parts.push('fbclid_' + fbclid);
+    if (msclkid)    parts.push('msclkid_' + msclkid);
+    if (clickAtMs)  parts.push('clickat_' + clickAtMs);
     return parts.join('|');
   }
   var attrToken = buildAttrToken();
@@ -825,6 +837,7 @@ a:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
           email: email,
           ga_client_id: gaClientId,
           gclid: gclid,
+          msclkid: msclkid,
           fbclid: fbclid,
           utm_source:   source,
           utm_medium:   medium,
