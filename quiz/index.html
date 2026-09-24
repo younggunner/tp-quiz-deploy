@@ -493,6 +493,65 @@ html.quiz-pop .quiz-card iframe{height:100% !important;min-height:100% !importan
       : (document.referrer ? 'referral' : 'direct');
   }
 
+  function sourceFromHidden(h) {
+    try {
+      if (h.gclid) return { channel: 'google', provenance: 'click_id' };
+      if (h.msclkid) return { channel: 'bing', provenance: 'click_id' };
+      if (h.fbclid) return { channel: 'meta', provenance: 'click_id' };
+      var raw = (h.utm_source && String(h.utm_source).trim()) || '';
+      var lower = raw.toLowerCase();
+      if (!raw || lower === 'not set' || lower === 'not_set' || lower === '(not set)') {
+        return { channel: 'organic', provenance: 'none' };
+      }
+      var map = {
+        google: 'google', adwords: 'google', googleads: 'google', google_ads: 'google',
+        bing: 'bing', microsoft: 'bing', msads: 'bing', microsoft_ads: 'bing',
+        facebook: 'meta', fb: 'meta', meta: 'meta', instagram: 'meta', ig: 'meta',
+        linkedin: 'linkedin',
+        cold_email: 'cold_email', instantly: 'cold_email',
+        drip: 'drip', sendy: 'drip',
+        bdr_call: 'bdr_call', kixie: 'bdr_call'
+      };
+      return { channel: map[lower] || 'unknown', provenance: 'utm' };
+    } catch (e) {
+      return { channel: 'unknown', provenance: 'none' };
+    }
+  }
+  function readQuizClick() {
+    try {
+      var raw = localStorage.getItem('quiz_click');
+      if (!raw) return null;
+      var o = JSON.parse(raw);
+      if (!o || typeof o.k !== 'string' || typeof o.v !== 'string') return null;
+      var t = o.t;
+      if (typeof t !== 'number' || !Number.isInteger(t)) return null;
+      if (t < Date.UTC(2020, 0, 1) || t > Date.now() + 86400000) return null;
+      return o;
+    } catch (e) { return null; }
+  }
+  var clickKey = hidden.gclid ? 'gclid' : (hidden.msclkid ? 'msclkid' : (hidden.fbclid ? 'fbclid' : ''));
+  if (clickKey) {
+    var clickVal = hidden[clickKey];
+    var stored = readQuizClick();
+    var fromUrl = params.get(clickKey) === clickVal;
+    if (fromUrl) {
+      if (stored && stored.k === clickKey && stored.v === clickVal) {
+        hidden.click_at = String(stored.t);
+      } else {
+        var clickNow = Date.now();
+        hidden.click_at = String(clickNow);
+        try {
+          localStorage.setItem('quiz_click', JSON.stringify({ k: clickKey, v: clickVal, t: clickNow }));
+        } catch (e) {}
+      }
+    } else if (stored && stored.k === clickKey && stored.v === clickVal) {
+      hidden.click_at = String(stored.t);
+    }
+  }
+  var srcDecided = sourceFromHidden(hidden);
+  hidden.source_channel = srcDecided.channel;
+  hidden.source_provenance = srcDecided.provenance;
+
   function applyHidden() {
     var widgets = document.querySelectorAll('[data-tf-widget]');
     Object.keys(hidden).forEach(function (k) {
@@ -536,13 +595,20 @@ html.quiz-pop .quiz-card iframe{height:100% !important;min-height:100% !importan
     var EP = 'https://nhdethynnmgrqlswqiqj.supabase.co/functions/v1/quiz-progress';
     var vid = 'q' + Date.now().toString(36) + Math.random().toString(36).slice(2, 10);
     var seq = 0;
-    var attr = { utm_source: '', utm_campaign: '', utm_term: '' };
+    var attr = { utm_source: '', utm_campaign: '', utm_term: '',
+      gclid: '', msclkid: '', fbclid: '', click_at: '', source_channel: '', source_provenance: '' };
     var ua_bucket = /FBAN|FBAV|FB_IAB|FB4A|Instagram/i.test(navigator.userAgent || '') ? 'facebook' : 'other';
     try {
       var h = (window.__gbAttributionTP && window.__gbAttributionTP()) || {};
       attr.utm_source = h.utm_source || '';
       attr.utm_campaign = h.utm_campaign || '';
       attr.utm_term = h.utm_term || '';
+      attr.gclid = h.gclid || '';
+      attr.msclkid = h.msclkid || '';
+      attr.fbclid = h.fbclid || '';
+      if (h.click_at) attr.click_at = new Date(Number(h.click_at)).toISOString();
+      attr.source_channel = h.source_channel || '';
+      attr.source_provenance = h.source_provenance || '';
     } catch (e) {}
     function beacon(event, formId, ref) {
       try {
@@ -552,7 +618,10 @@ html.quiz-pop .quiz-card iframe{height:100% !important;min-height:100% !importan
           ref: ref || '', seq: seq,
           utm_source: attr.utm_source, utm_campaign: attr.utm_campaign,
           utm_term: attr.utm_term,
-          variant: window.__quizVariant || '', slot: 'main', ua_bucket: ua_bucket
+          variant: window.__quizVariant || '', slot: 'main', ua_bucket: ua_bucket,
+          gclid: attr.gclid, msclkid: attr.msclkid, fbclid: attr.fbclid,
+          click_at: attr.click_at, source_channel: attr.source_channel,
+          source_provenance: attr.source_provenance
         });
         if (navigator.sendBeacon) {
           navigator.sendBeacon(EP, new Blob([payload], { type: 'text/plain' }));
