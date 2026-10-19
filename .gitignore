@@ -1,0 +1,2 @@
+# Python creates these when scripts/run-tests imports the test modules.
+__pycache__/

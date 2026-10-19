@@ -1,0 +1,8 @@
+#!/bin/sh
+# The one test command for this repo. Needs Python 3 with playwright + chromium.
+set -e
+cd "$(dirname "$0")/.."
+before=$(git status --porcelain)
+python3 -m unittest discover -s tests -p 'test_*.py' -v
+after=$(git status --porcelain)
+[ "$before" = "$after" ] || { echo "tests changed the working tree:"; git status --porcelain; exit 1; }

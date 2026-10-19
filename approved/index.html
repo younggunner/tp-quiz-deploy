@@ -759,6 +759,16 @@ a:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
 <script>
 (function(){
   var params = new URLSearchParams(window.location.search);
+  // Calendly's embed copies utm_* straight from this page's address, so drop
+  // Typeform's "_____" blanks from the address before the widget loads.
+  try {
+    var kept = new URLSearchParams();
+    params.forEach(function(v, k){ if (!/^_+$/.test(v.trim())) kept.append(k, v); });
+    if (kept.toString() !== params.toString()) {
+      var qs = kept.toString();
+      history.replaceState(null, '', window.location.pathname + (qs ? '?' + qs : '') + window.location.hash);
+    }
+  } catch (_) {}
   var name    = params.get('name') || '';
   var email   = params.get('email') || '';
   var company = params.get('a1') || '';
@@ -769,15 +779,20 @@ a:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
     phone = phone.replace(/^\s+/, '');
     if (phone.indexOf('+') === -1 && /^1[\s.-]?\d{3}/.test(phone)) phone = '+' + phone;
   }
-  var source  = params.get('source') || params.get('utm_source') || 'Not Set';
-  var medium   = params.get('utm_medium')   || '';
-  var campaign = params.get('utm_campaign') || '';
-  var term     = params.get('utm_term')     || '';
-  var content  = params.get('utm_content')  || '';
-  var gclid    = params.get('gclid')        || '';
-  var msclkid  = params.get('msclkid')      || '';
-  var fbclid   = params.get('fbclid')       || '';
-  var clickAtParam = params.get('click_at') || '';
+  // Typeform fills an empty hidden field in its redirect with blanks or "_____".
+  function q(k){
+    var v = (params.get(k) || '').trim();
+    return /^_*$/.test(v) ? '' : v;
+  }
+  var source  = q('source') || q('utm_source') || 'Not Set';
+  var medium   = q('utm_medium');
+  var campaign = q('utm_campaign');
+  var term     = q('utm_term');
+  var content  = q('utm_content');
+  var gclid    = q('gclid');
+  var msclkid  = q('msclkid');
+  var fbclid   = q('fbclid');
+  var clickAtParam = q('click_at');
   function parseClickAtMs(raw) {
     if (!raw) return '';
     if (/^\d{12,13}$/.test(raw)) return raw;
@@ -786,6 +801,17 @@ a:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
     return String(t);
   }
   var clickAtMs = parseClickAtMs(clickAtParam);
+
+  // The quiz page (same origin) stores the first-seen click time and the
+  // visitor id. Use the click time only when it belongs to this click id.
+  var gbUid = '';
+  try {
+    var qc = JSON.parse(localStorage.getItem('quiz_click') || 'null');
+    var clickId = gclid ? ['gclid', gclid] : (msclkid ? ['msclkid', msclkid] : (fbclid ? ['fbclid', fbclid] : null));
+    if (!clickAtMs && qc && clickId && qc.k === clickId[0] && qc.v === clickId[1]) clickAtMs = parseClickAtMs(String(qc.t));
+    gbUid = localStorage.getItem('gb_uid') || '';
+    if (!/^[a-f0-9-]{36}$/.test(gbUid)) gbUid = '';
+  } catch (_) {}
 
   // T6 — real GA4 client_id from _ga cookie (format: GA1.1.<cid>.<ts>)
   function getGaClientId(){
@@ -804,6 +830,7 @@ a:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
     if (fbclid)     parts.push('fbclid_' + fbclid);
     if (msclkid)    parts.push('msclkid_' + msclkid);
     if (clickAtMs)  parts.push('clickat_' + clickAtMs);
+    if (gbUid)      parts.push('gbuid_' + gbUid);
     return parts.join('|');
   }
   var attrToken = buildAttrToken();
