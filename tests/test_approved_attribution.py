@@ -71,7 +71,11 @@ class ApprovedAttribution(unittest.TestCase):
             page.wait_for_function("window.__cal && window.__cal.length")
             qs = parse_qs(urlparse(page.evaluate("window.__cal[0]")).query)
             if posts is not None:
-                page.wait_for_timeout(300)
+                # Wait (up to 5 s) for the attribution POST itself, not a fixed delay.
+                for _ in range(50):
+                    if posts:
+                        break
+                    page.wait_for_timeout(100)
             return {k: v[0] for k, v in qs.items()}
         finally:
             ctx.close()
