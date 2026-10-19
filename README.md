@@ -7,3 +7,8 @@ TinyPumper quiz funnel — GitHub Pages. Serves `quiz.tinypumper.com` (after DNS
 - `/approved` — booking page (dual Calendly, transparent pricing). Fresh copy 2026-07-13: fake scarcity removed, Cometly + secondary pixel 769334093165499 stripped (GTM-5PQGM83 carries all tags).
 - `/success` — post-booking confirmation (Calendly redirect target).
 - NO CNAME file yet — added at DNS cutover so github.io preview URLs work first.
+
+## Tests
+
+`scripts/run-tests` runs the browser tests for `/approved` (Calendly is stubbed and every outside request is blocked).
+One-time setup: `python3 -m pip install playwright && python3 -m playwright install chromium`.

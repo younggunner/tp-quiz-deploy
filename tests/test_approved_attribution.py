@@ -41,8 +41,12 @@ class ApprovedAttribution(unittest.TestCase):
         cls.pw.stop()
         cls.server.shutdown()
 
-    def booking(self, query, storage=None):
-        """Load /approved?query with localStorage preset; return the Calendly URL params."""
+    def booking(self, query, storage=None, posts=None):
+        """Load /approved?query with localStorage preset; return the Calendly URL params.
+
+        The legacy Apps Script attribution POST is answered locally; its JSON
+        body is appended to `posts` when a list is given.
+        """
         ctx = self.browser.new_context()
         try:
             page = ctx.new_page()
@@ -53,6 +57,10 @@ class ApprovedAttribution(unittest.TestCase):
                     return r.continue_()
                 if "assets.calendly.com" in url and url.endswith("widget.js"):
                     return r.fulfill(status=200, content_type="text/javascript", body=STUB)
+                if url.startswith("https://script.google.com/") and r.request.method == "POST":
+                    if posts is not None:
+                        posts.append(json.loads(r.request.post_data))
+                    return r.fulfill(status=200, body="ok")
                 return r.abort()
 
             page.route("**/*", route)
@@ -62,6 +70,8 @@ class ApprovedAttribution(unittest.TestCase):
             page.goto(f"{self.base}/approved/?{query}")
             page.wait_for_function("window.__cal && window.__cal.length")
             qs = parse_qs(urlparse(page.evaluate("window.__cal[0]")).query)
+            if posts is not None:
+                page.wait_for_timeout(300)
             return {k: v[0] for k, v in qs.items()}
         finally:
             ctx.close()
@@ -117,6 +127,25 @@ class ApprovedAttribution(unittest.TestCase):
         self.assertNotIn("utm_term", qs)
         self.assertNotIn("msclkid", qs)
         self.assertEqual(qs.get("fbclid"), [""])
+
+    def test_stored_click_time_for_bing_and_facebook_clicks(self):
+        for key in ("msclkid", "fbclid"):
+            with self.subTest(click=key):
+                stored = {"quiz_click": json.dumps({"k": key, "v": "C1", "t": 1792000000000})}
+                same = self.tokens(self.booking(f"utm_source=x&{key}=C1", stored))
+                self.assertIn(f"{key}_C1", same)
+                self.assertIn("clickat_1792000000000", same)
+                other = self.tokens(self.booking(f"utm_source=x&{key}=C2", stored))
+                self.assertFalse(any(t.startswith("clickat_") for t in other))
+
+    def test_attribution_post_gets_cleaned_values(self):
+        posts = []
+        self.booking("email=t%40example.com&utm_source=google&utm_term=_____&gclid=G1&msclkid=_____", posts=posts)
+        self.assertEqual(len(posts), 1)
+        data = posts[0]["data"]
+        self.assertEqual(data["email"], "t@example.com")
+        self.assertEqual((data["utm_source"], data["gclid"]), ("google", "G1"))
+        self.assertEqual((data["utm_term"], data["msclkid"]), ("", ""))
 
     def test_invalid_visitor_id_is_dropped(self):
         cal = self.booking("utm_source=google", {"gb_uid": "not-a-uuid"})

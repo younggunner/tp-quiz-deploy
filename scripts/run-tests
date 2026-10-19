@@ -1,5 +1,6 @@
 #!/bin/sh
-# The one test command for this repo. Needs Python 3 with playwright + chromium.
+# The one test command for this repo.
+# One-time setup: python3 -m pip install playwright && python3 -m playwright install chromium
 set -e
 cd "$(dirname "$0")/.."
 before=$(git status --porcelain)
