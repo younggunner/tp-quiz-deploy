@@ -21,7 +21,7 @@
 })(window,document,'script','dataLayer','GTM-5PQGM83');
 </script>
 
-<!-- Assignment: WP7 live. D1 recency split + hashArm(gb_uid). ?qv=a|b still forces. -->
+<!-- Assignment: EXP-11 revert_all 2026-10-27. Stale arrivals always layout A. ?qv=a|b still forces. a_same_session unchanged. -->
 <script>
 (function () {
   function uuidv4() {
@@ -74,7 +74,7 @@
     } catch (e) {}
     var same = refIsMarketing(document.referrer) || recentMarketingHop(attrCookie, Date.now(), RECENCY_MS);
     if (same) { arm = 'a_same_session'; layout = 'a'; }
-    else { arm = hashArm(uid); layout = arm; }
+    else { arm = 'a'; layout = 'a'; }
   }
   document.documentElement.dataset.variant = layout;
   window.__quizVariant = arm;
