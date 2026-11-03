@@ -633,9 +633,18 @@ html.quiz-pop .quiz-card iframe{height:100% !important;min-height:100% !importan
       beacon('question', p && p.formId, p && p.ref);
       try {
         var first = { sTbsRn: '38969d2818d6e750', uVP2g9QP: '01GV66FJERY2T6WMPAN9DFWW03' };
+        var icpHop = { sTbsRn: 'efaf22702ee3d644', uVP2g9QP: '7c3e9a11-4b2d-4f81-9c06-a712c920db76' };
         var ref = (p && p.ref) || '';
         var fid = (p && p.formId) || '';
         if (ref && first[fid] && ref !== first[fid]) popQuiz();
+        if (ref && icpHop[fid] === ref && !window.__quizQ1IcpFired) {
+          window.__quizQ1IcpFired = true;
+          var brand = fid === 'uVP2g9QP' ? 'tp' : 'gb';
+          window.dataLayer = window.dataLayer || [];
+          window.dataLayer.push({ event: 'quiz_q1_icp', brand: brand });
+          window.uetq = window.uetq || [];
+          window.uetq.push('event', 'quiz_q1_icp', { event_category: brand, event_label: 'q1_icp' });
+        }
       } catch (e) {}
       pinFooter();
     };
