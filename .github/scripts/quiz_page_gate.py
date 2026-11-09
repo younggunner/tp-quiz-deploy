@@ -102,6 +102,11 @@ def check_file(path: Path, brand: str, form_id: str) -> list[str]:
             fails.append(
                 f"{rel}: data-tf-widget={m.group(1)!r} is not this brand's form {form_id}"
             )
+    # EXP-11 off (Greg 2026-11-09): layout A is permanent. hashArm 50/50
+    # must not come back as a live arm. WHY: 2026-10-27 revert_all left
+    # unused hashArm in the page; dead assignment code is how B came back.
+    if path.name == "index.html" and re.search(r"function\s+hashArm\b", text):
+        fails.append(f"{rel}: hashArm still present (EXP-11 off; layout A is permanent)")
     return fails
 
 
@@ -128,6 +133,10 @@ def self_test() -> int:
         "no-beacon": src.replace(BEACON_NEEDLE, "NOT-A-BEACON"),
         "no-canon": re.sub(r'<link rel="canonical"[^>]*>', "", src, count=1),
         "wrong-form": src.replace(f'data-tf-widget="{form_id}"', 'data-tf-widget="XXXXXXX"'),
+        "hashArm": src.replace(
+            "window.__gbUid = uid;",
+            "function hashArm(uid) { return 'b'; }\n  window.__gbUid = uid;",
+        ),
     }
     if brand == "tp":
         plants["gb-stats"] = src.replace("60 seconds.", "6% pump-to-net. 60 seconds.")
