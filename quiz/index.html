@@ -487,10 +487,10 @@ html.quiz-pop .quiz-card iframe{height:100% !important;min-height:100% !importan
 
   hidden.landing_page = window.location.origin + window.location.pathname;
   if (document.referrer) hidden.referrer = document.referrer;
-  if (!hidden.source) {
-    hidden.source = hidden.utm_source
-      ? hidden.utm_source + (hidden.utm_medium ? '/' + hidden.utm_medium : '')
-      : (document.referrer ? 'referral' : 'direct');
+  // Greg 2026-11-20 (Q9): do not invent source=referral|direct. Copy UTMs when
+  // present; otherwise leave source unset so Typeform/Slack cannot label from it.
+  if (!hidden.source && hidden.utm_source) {
+    hidden.source = hidden.utm_source + (hidden.utm_medium ? '/' + hidden.utm_medium : '');
   }
 
   function sourceFromHidden(h) {
