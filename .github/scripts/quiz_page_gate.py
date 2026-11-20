@@ -31,6 +31,10 @@ GTM_OK = "GTM-5PQGM83"
 PIXEL_BANNED = "769334093165499"
 ATTR_MARKER = "Attribution script"
 BEACON_NEEDLE = "lander-engagement"
+# Greg 2026-11-20 (Q9): coarse Typeform source=referral|direct is not the engine channel.
+COARSE_SOURCE = re.compile(
+    r"document\.referrer\s*\?\s*['\"]referral['\"]\s*:\s*['\"]direct['\"]"
+)
 GB_STATS = re.compile(
     r"6%\s*pump[- ]to[- ]net|98%\s*success\s*rate|200%\s*money[- ]back|"
     r"\b2\s+to\s+2,000\s+wells\b",
@@ -82,6 +86,8 @@ def check_file(path: Path, brand: str, form_id: str) -> list[str]:
         fails.append(f"{rel}: missing noindex,nofollow (R5)")
     if PIXEL_BANNED in text:
         fails.append(f"{rel}: banned pixel {PIXEL_BANNED} (R6)")
+    if path.name == "index.html" and "quiz" in path.parts and COARSE_SOURCE.search(text):
+        fails.append(f"{rel}: coarse source=referral|direct (Greg 2026-11-20 Q9)")
     gtms = set(re.findall(r"GTM-[A-Z0-9]+", text))
     if gtms and gtms != {GTM_OK}:
         fails.append(f"{rel}: GTM container {sorted(gtms)} is not {GTM_OK} (R6)")
@@ -128,6 +134,11 @@ def self_test() -> int:
         "no-beacon": src.replace(BEACON_NEEDLE, "NOT-A-BEACON"),
         "no-canon": re.sub(r'<link rel="canonical"[^>]*>', "", src, count=1),
         "wrong-form": src.replace(f'data-tf-widget="{form_id}"', 'data-tf-widget="XXXXXXX"'),
+        "coarse-source": src.replace(
+            "if (!hidden.source && hidden.utm_source)",
+            "if (!hidden.source) { hidden.source = document.referrer ? 'referral' : 'direct'; }\n  if (!hidden.source && hidden.utm_source)",
+            1,
+        ),
     }
     if brand == "tp":
         plants["gb-stats"] = src.replace("60 seconds.", "6% pump-to-net. 60 seconds.")
